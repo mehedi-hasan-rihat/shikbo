@@ -46,10 +46,24 @@ export function StudentProgressChart({ data }: StudentProgressChartProps) {
     color: s.color,
   })).filter((d) => d.value > 0);
 
+  // Screen-reader summary
+  const summary = SEGMENTS.filter((s) => data[s.key] > 0)
+    .map(
+      (s) =>
+        `${s.label}: ${data[s.key]} of ${data.total} (${Math.round((data[s.key] / data.total) * 100)}%)`
+    )
+    .join(", ");
+
   return (
     <div>
-      {/* Stacked horizontal progress bar */}
+      {/* Accessible text description */}
+      <p className="sr-only">
+        Assignment progress across {data.total} assignment{data.total !== 1 ? "s" : ""}: {summary}.
+      </p>
+
+      {/* Stacked horizontal progress bar — decorative, described above */}
       <div
+        aria-hidden="true"
         style={{
           display: "flex",
           height: 12,
@@ -58,8 +72,6 @@ export function StudentProgressChart({ data }: StudentProgressChartProps) {
           marginBottom: "var(--space-4)",
           background: "#e5e7eb",
         }}
-        role="img"
-        aria-label="Progress distribution"
       >
         {SEGMENTS.map((s) => {
           const val = data[s.key];
@@ -73,18 +85,18 @@ export function StudentProgressChart({ data }: StudentProgressChartProps) {
                 background: s.color,
                 transition: "width 400ms ease",
               }}
-              title={`${s.label}: ${val}`}
             />
           );
         })}
       </div>
 
-      {/* Legend */}
-      <div
+      {/* Legend — visible to all, including screen readers */}
+      <dl
         style={{
           display: "flex",
           flexWrap: "wrap",
           gap: "var(--space-4)",
+          margin: 0,
         }}
       >
         {SEGMENTS.map((s) => {
@@ -102,6 +114,7 @@ export function StudentProgressChart({ data }: StudentProgressChartProps) {
               }}
             >
               <span
+                aria-hidden="true"
                 style={{
                   display: "inline-block",
                   width: 8,
@@ -111,26 +124,27 @@ export function StudentProgressChart({ data }: StudentProgressChartProps) {
                   flexShrink: 0,
                 }}
               />
-              <span style={{ fontSize: "var(--font-xs)", color: "var(--text-secondary)" }}>
+              <dt style={{ fontSize: "var(--font-xs)", color: "var(--text-secondary)" }}>
                 {s.label}
-              </span>
-              <span
+              </dt>
+              <dd
                 style={{
                   fontSize: "var(--font-xs)",
                   color: "var(--text-muted)",
                   fontVariantNumeric: "tabular-nums",
+                  margin: 0,
                 }}
               >
                 {val} · {pct}%
-              </span>
+              </dd>
             </div>
           );
         })}
-      </div>
+      </dl>
 
-      {/* Bar chart for detail */}
+      {/* Bar chart — decorative, described by sr-only text above */}
       {chartData.length > 0 && (
-        <div style={{ marginTop: "var(--space-5)" }}>
+        <div aria-hidden="true" style={{ marginTop: "var(--space-5)" }}>
           <ResponsiveContainer width="100%" height={100}>
             <BarChart
               data={chartData}
@@ -144,6 +158,7 @@ export function StudentProgressChart({ data }: StudentProgressChartProps) {
                 axisLine={false}
                 tickLine={false}
                 allowDecimals={false}
+                tabIndex={-1}
               />
               <YAxis
                 type="category"
@@ -152,6 +167,7 @@ export function StudentProgressChart({ data }: StudentProgressChartProps) {
                 tick={{ fontSize: 12, fill: "#4b5563" }}
                 axisLine={false}
                 tickLine={false}
+                tabIndex={-1}
               />
               <Tooltip
                 cursor={{ fill: "rgba(0,0,0,0.03)" }}
@@ -166,7 +182,7 @@ export function StudentProgressChart({ data }: StudentProgressChartProps) {
                 itemStyle={{ color: "#111827" }}
                 labelStyle={{ color: "#6b7280", marginBottom: 2 }}
               />
-              <Bar dataKey="value" radius={[0, 3, 3, 0]} maxBarSize={14}>
+              <Bar dataKey="value" radius={[0, 3, 3, 0]} maxBarSize={14} tabIndex={-1}>
                 {chartData.map((entry) => (
                   <Cell key={entry.name} fill={entry.color} />
                 ))}

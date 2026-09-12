@@ -458,7 +458,7 @@ If a component does not exist yet, add it here and document it in this file.
 | `Tabs` | `ui/Tabs.tsx` | Keyboard-navigable tab set. Pass a `tabs` array with `id`, `label`, `content`. |
 | `Dropdown` | `ui/Dropdown.tsx` | Positioned menu. Pass `trigger`, `groups` (with items), and `align`. |
 | `EmptyState` | `ui/EmptyState.tsx` | Empty list/page state. Props: `title`, `description`, `action`. |
-| `LoadingState` | `ui/LoadingState.tsx` | Skeleton rows. Variants: `list` (default), `page`. |
+| `LoadingState` | `ui/LoadingState.tsx` | Skeleton rows. Variants: `list` (default) — stacked table rows; `page` — header + block skeletons; `kpi` — header + KPI card grid + block skeletons (for dashboard routes). All variants include `role="status"` and a `.sr-only` "Loading…" announcement. |
 | `ErrorState` | `ui/ErrorState.tsx` | Error surface with `role="alert"`. Props: `title`, `message`, `action`. |
 
 Assignment-specific components live in `src/components/assignments/`:
@@ -578,6 +578,7 @@ Use them directly in JSX instead of rewriting the same styles.
 | `.empty-state__description` | `13px`, muted, max 320px |
 | `.skeleton` | Pulsing loading placeholder |
 | `.sr-only` | Screen-reader-only (visually hidden) |
+| `.skip-link` | Skip-to-content anchor — visually hidden until `:focus-visible`, then slides in as a primary-colored pill. Place once in the root layout linking to `#main-content`. |
 
 ### Overlays
 

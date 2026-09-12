@@ -12,11 +12,8 @@ export function ErrorState({
   action,
 }: ErrorStateProps) {
   return (
-    <div className="empty-state" role="alert">
-      <p
-        className="empty-state__title"
-        style={{ color: "var(--danger)" }}
-      >
+    <div className="empty-state" role="region" aria-label={title}>
+      <p className="empty-state__title" style={{ color: "var(--danger)" }}>
         {title}
       </p>
       <p className="empty-state__description">{message}</p>

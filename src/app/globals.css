@@ -1166,4 +1166,36 @@ a:hover {
     margin: var(--space-1) 0;
   }
 
+  /* ----------------------------------------------------------
+     SKIP LINK — keyboard navigation accessibility
+     ---------------------------------------------------------- */
+
+  /* Visually hidden until focused; revealed via :focus-visible */
+  .skip-link {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+    z-index: 9999;
+    padding: var(--space-2) var(--space-4);
+    background: var(--primary);
+    color: var(--primary-foreground);
+    border-radius: var(--radius-md);
+    font-size: var(--font-sm);
+    font-weight: var(--font-medium);
+    text-decoration: none;
+    /* Hidden by default */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 150ms ease, transform 150ms ease;
+  }
+
+  .skip-link:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    outline: 2px solid var(--primary-foreground);
+    outline-offset: 2px;
+  }
+
 } /* end @layer components */

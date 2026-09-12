@@ -11,18 +11,20 @@ import {
   getStatusDistribution,
   getAssignmentAnalysis,
   getAtRiskStudents,
+  getActionItems,
 } from "@/server/lib/analytics";
 import { db } from "@/lib/db";
 
 export default async function InstructorDashboardPage() {
   const session = await requireInstructor();
 
-  const [overview, statusDist, assignmentRows, atRisk, recentSubmissions] =
+  const [overview, statusDist, assignmentRows, atRisk, actions, recentSubmissions] =
     await Promise.all([
       getOverviewMetrics(session.userId),
       getStatusDistribution(session.userId),
       getAssignmentAnalysis(session.userId),
       getAtRiskStudents(session.userId),
+      getActionItems(session.userId),
       db.submission.findMany({
         where: { assignment: { createdBy: session.userId } },
         orderBy: { submittedAt: "desc" },
@@ -36,6 +38,12 @@ export default async function InstructorDashboardPage() {
 
   const hasData = overview.totalSubmissions > 0;
 
+  const totalActionCount =
+    (actions.pendingReviewCount > 0 ? 1 : 0) +
+    (actions.atRiskStudentCount > 0 ? 1 : 0) +
+    actions.lowAcceptanceAssignments.length +
+    (actions.deadlinesThisWeek.length > 0 ? 1 : 0);
+
   return (
     <>
       <div className="page-header">
@@ -48,7 +56,73 @@ export default async function InstructorDashboardPage() {
       </div>
 
       {/* ------------------------------------------------------------------ */}
-      {/* KPI row                                                             */}
+      {/* Action center — SHK-045                                            */}
+      {/* ------------------------------------------------------------------ */}
+      {totalActionCount > 0 && (
+        <section style={{ marginBottom: "var(--space-6)" }}>
+          <h2
+            style={{
+              fontSize: "var(--font-sm)",
+              fontWeight: "var(--font-semibold)",
+              color: "var(--text-primary)",
+              marginBottom: "var(--space-3)",
+            }}
+          >
+            Needs your attention
+          </h2>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "var(--space-2)",
+            }}
+          >
+            {/* Pending reviews */}
+            {actions.pendingReviewCount > 0 && (
+              <ActionItem
+                href="/instructor/submissions?status=pending"
+                label={`${actions.pendingReviewCount} submission${actions.pendingReviewCount !== 1 ? "s" : ""} waiting for review`}
+                kind="pending"
+                cta="Review now"
+              />
+            )}
+
+            {/* At-risk students */}
+            {actions.atRiskStudentCount > 0 && (
+              <ActionItem
+                href="#students-needing-attention"
+                label={`${actions.atRiskStudentCount} student${actions.atRiskStudentCount !== 1 ? "s" : ""} ${actions.atRiskStudentCount !== 1 ? "have" : "has"} repeated needs improvement`}
+                kind="warning"
+                cta="View students"
+              />
+            )}
+
+            {/* Low acceptance assignments */}
+            {actions.lowAcceptanceAssignments.map((a) => (
+              <ActionItem
+                key={a.assignmentId}
+                href={`/instructor/assignments/${a.assignmentId}`}
+                label={`"${a.title}" has a ${a.acceptanceRate}% acceptance rate`}
+                kind="warning"
+                cta="View assignment"
+              />
+            ))}
+
+            {/* Assignments with deadlines this week */}
+            {actions.deadlinesThisWeek.length > 0 && (
+              <ActionItem
+                href="/instructor/assignments"
+                label={`${actions.deadlinesThisWeek.length} assignment${actions.deadlinesThisWeek.length !== 1 ? "s have" : " has"} a deadline this week${actions.deadlinesThisWeek.reduce((n, a) => n + a.pendingCount, 0) > 0 ? ` · ${actions.deadlinesThisWeek.reduce((n, a) => n + a.pendingCount, 0)} submission${actions.deadlinesThisWeek.reduce((n, a) => n + a.pendingCount, 0) !== 1 ? "s" : ""} pending` : ""}`}
+                kind="info"
+                cta="View assignments"
+              />
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* ------------------------------------------------------------------ */}
+      {/* KPI row — SHK-044                                                  */}
       {/* ------------------------------------------------------------------ */}
       <div
         style={{
@@ -73,9 +147,9 @@ export default async function InstructorDashboardPage() {
           }
         />
         <KpiCard
-          label="Pending review"
-          value={hasData ? `${overview.pendingRate}%` : "—"}
-          support={hasData ? `${statusDist.pending} unreviewed` : undefined}
+          label="Pending reviews"
+          value={actions.pendingReviewCount}
+          support={hasData ? "awaiting review" : undefined}
         />
         <KpiCard
           label="Avg. review time"
@@ -100,7 +174,7 @@ export default async function InstructorDashboardPage() {
       )}
 
       {/* ------------------------------------------------------------------ */}
-      {/* Status chart + at-risk students                                     */}
+      {/* Status chart + at-risk students                                    */}
       {/* ------------------------------------------------------------------ */}
       <div
         className="grid-cols-responsive"
@@ -161,7 +235,11 @@ export default async function InstructorDashboardPage() {
         </section>
 
         {/* At-risk students */}
-        <section className="card" style={{ padding: 0, overflow: "hidden" }}>
+        <section
+          id="students-needing-attention"
+          className="card"
+          style={{ padding: 0, overflow: "hidden" }}
+        >
           <div style={{ padding: "var(--space-5) var(--space-5) var(--space-4)" }}>
             <h2
               style={{
@@ -182,7 +260,7 @@ export default async function InstructorDashboardPage() {
       </div>
 
       {/* ------------------------------------------------------------------ */}
-      {/* Assignment breakdown                                                */}
+      {/* Assignment breakdown                                               */}
       {/* ------------------------------------------------------------------ */}
       <section
         className="card"
@@ -208,7 +286,7 @@ export default async function InstructorDashboardPage() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* Recent submissions                                                  */}
+      {/* Recent submissions                                                 */}
       {/* ------------------------------------------------------------------ */}
       <section>
         <div
@@ -315,6 +393,103 @@ export default async function InstructorDashboardPage() {
         )}
       </section>
     </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Action item row
+// ---------------------------------------------------------------------------
+
+type ActionKind = "pending" | "warning" | "info";
+
+const kindStyles: Record<
+  ActionKind,
+  { border: string; bg: string; dot: string; textColor: string }
+> = {
+  pending: {
+    border: "var(--border)",
+    bg:     "var(--surface)",
+    dot:    "var(--status-pending)",
+    textColor: "var(--text-primary)",
+  },
+  warning: {
+    border: "var(--warning-border)",
+    bg:     "var(--warning-subtle)",
+    dot:    "var(--warning)",
+    textColor: "var(--warning-foreground)",
+  },
+  info: {
+    border: "var(--info-border)",
+    bg:     "var(--info-subtle)",
+    dot:    "var(--info)",
+    textColor: "var(--info-foreground)",
+  },
+};
+
+function ActionItem({
+  href,
+  label,
+  kind,
+  cta,
+}: {
+  href: string;
+  label: string;
+  kind: ActionKind;
+  cta: string;
+}) {
+  const s = kindStyles[kind];
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: "var(--space-4)",
+        padding: "var(--space-3) var(--space-4)",
+        background: s.bg,
+        border: `1px solid ${s.border}`,
+        borderRadius: "var(--radius-lg)",
+      }}
+    >
+      <div
+        style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", minWidth: 0 }}
+      >
+        <span
+          style={{
+            width: 6,
+            height: 6,
+            borderRadius: "50%",
+            background: s.dot,
+            flexShrink: 0,
+          }}
+        />
+        <span
+          style={{
+            fontSize: "var(--font-sm)",
+            color: s.textColor,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {label}
+        </span>
+      </div>
+      <Link
+        href={href}
+        style={{
+          fontSize: "var(--font-sm)",
+          fontWeight: "var(--font-medium)",
+          color: kind === "pending" ? "var(--primary)" : s.textColor,
+          whiteSpace: "nowrap",
+          flexShrink: 0,
+          textDecoration: "none",
+          opacity: 0.9,
+        }}
+      >
+        {cta} →
+      </Link>
+    </div>
   );
 }
 

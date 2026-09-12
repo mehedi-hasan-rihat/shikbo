@@ -195,6 +195,111 @@ export async function getAssignmentAnalysis(
 }
 
 // ---------------------------------------------------------------------------
+// Action items for instructor dashboard (SHK-045)
+// ---------------------------------------------------------------------------
+
+export type ActionItems = {
+  pendingReviewCount: number;
+  atRiskStudentCount: number;     // students with ≥2 needs_improvement (latest per assignment)
+  lowAcceptanceAssignments: {     // acceptance rate < 50%, ≥3 students submitted
+    assignmentId: string;
+    title: string;
+    acceptanceRate: number;
+  }[];
+  deadlinesThisWeek: {            // active assignments with deadline in next 7 days
+    assignmentId: string;
+    title: string;
+    deadline: Date;
+    pendingCount: number;         // students with pending submissions for this assignment
+  }[];
+};
+
+export async function getActionItems(instructorId: string): Promise<ActionItems> {
+  const now = new Date();
+  const weekFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+  const [pendingCount, assignments, atRisk] = await Promise.all([
+    // Count all unreviewed submissions across instructor's assignments
+    db.submission.count({
+      where: {
+        assignment: { createdBy: instructorId },
+        status: "pending",
+      },
+    }),
+    // All active assignments with their submissions for analysis
+    db.assignment.findMany({
+      where: { createdBy: instructorId, archivedAt: null },
+      select: {
+        id: true,
+        title: true,
+        deadline: true,
+        submissions: {
+          select: { studentId: true, status: true, submittedAt: true },
+          orderBy: { submittedAt: "desc" },
+        },
+      },
+    }),
+    getAtRiskStudents(instructorId),
+  ]);
+
+  const lowAcceptanceAssignments: ActionItems["lowAcceptanceAssignments"] = [];
+  const deadlinesThisWeek: ActionItems["deadlinesThisWeek"] = [];
+
+  for (const a of assignments) {
+    // Latest submission per student
+    const latestByStudent = new Map<string, { status: string }>();
+    for (const sub of a.submissions) {
+      if (!latestByStudent.has(sub.studentId)) {
+        latestByStudent.set(sub.studentId, { status: sub.status });
+      }
+    }
+    const latest = [...latestByStudent.values()];
+    const uniqueStudents = latest.length;
+
+    // Low acceptance: < 50% rate AND at least 3 students have submitted
+    if (uniqueStudents >= 3) {
+      const accepted = latest.filter((s) => s.status === "accepted").length;
+      const rate = Math.round((accepted / uniqueStudents) * 100);
+      if (rate < 50) {
+        lowAcceptanceAssignments.push({
+          assignmentId: a.id,
+          title: a.title,
+          acceptanceRate: rate,
+        });
+      }
+    }
+
+    // Deadlines this week (only future deadlines)
+    if (a.deadline > now && a.deadline <= weekFromNow) {
+      const pendingForThis = latest.filter(
+        (s) => s.status === "pending"
+      ).length;
+      deadlinesThisWeek.push({
+        assignmentId: a.id,
+        title: a.title,
+        deadline: a.deadline,
+        pendingCount: pendingForThis,
+      });
+    }
+  }
+
+  // Sort low acceptance by worst rate first
+  lowAcceptanceAssignments.sort((a, b) => a.acceptanceRate - b.acceptanceRate);
+
+  // Sort deadlines by soonest first
+  deadlinesThisWeek.sort(
+    (a, b) => a.deadline.getTime() - b.deadline.getTime()
+  );
+
+  return {
+    pendingReviewCount: pendingCount,
+    atRiskStudentCount: atRisk.length,
+    lowAcceptanceAssignments,
+    deadlinesThisWeek,
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Student overview metrics (SHK-041)
 // ---------------------------------------------------------------------------
 
