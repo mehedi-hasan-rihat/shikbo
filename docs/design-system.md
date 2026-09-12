@@ -468,6 +468,9 @@ Assignment-specific components live in `src/components/assignments/`:
 | `AssignmentForm` | `assignments/AssignmentForm.tsx` | Create/edit assignment form. Props: `action`, `defaultValues`, `submitLabel`. Instructor flows only. |
 | `SubmissionForm` | `assignments/SubmissionForm.tsx` | Student submission form. Fields: URL (required), note (optional). Props: `action`, `defaultUrl`, `defaultNote`, `submitLabel`, `onCancel`. Client component using `useActionState`. |
 | `ReviewForm` | `submissions/ReviewForm.tsx` | Instructor review form. Fields: status (select), feedback (textarea). Props: `action`, `defaultStatus`, `defaultFeedback`. Client component using `useActionState`. |
+| `StatusDonutChart` | `analytics/StatusDonutChart.tsx` | Recharts donut chart for submission status distribution. Props: `data: StatusDistribution`. Client component. Shows "No submissions yet" empty state. |
+| `AssignmentAnalysisTable` | `analytics/AssignmentAnalysisTable.tsx` | Table of all assignments with difficulty, student count, needs-improvement count, accepted count, and acceptance rate with inline progress bars. Sorted by most struggle. Client component. |
+| `AtRiskStudentsTable` | `analytics/AtRiskStudentsTable.tsx` | Table of students with ≥2 latest submissions at needs_improvement. Shows name, email, count, total submissions, last active. Client component. |
 
 Layout components live in `src/components/layout/`:
 

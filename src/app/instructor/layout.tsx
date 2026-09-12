@@ -12,7 +12,6 @@ const instructorNav: NavSection[] = [
       { label: "Assignments", href: "/instructor/assignments" },
       { label: "Submissions", href: "/instructor/submissions" },
       { label: "Students", href: "/instructor/students" },
-      { label: "Analytics", href: "/instructor/analytics" },
       { label: "AI Assistant", href: "/instructor/ai" },
     ],
   },

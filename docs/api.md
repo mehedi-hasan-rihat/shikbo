@@ -40,6 +40,17 @@ redirects to `/student/assignments/:id`.
 
 GET /api/instructor/analytics
 
+### Analytics data service (`src/server/lib/analytics.ts`)
+
+Server-only module. All functions require `instructorId` and scope queries to that instructor's assignments.
+
+| Function | Returns |
+|----------|---------|
+| `getOverviewMetrics(instructorId)` | `OverviewMetrics`: totalAssignments, totalSubmissions, acceptanceRate, needsImprovementRate, pendingRate, avgReviewTimeHours |
+| `getStatusDistribution(instructorId)` | `StatusDistribution`: accepted/pending/needs_improvement/total counts |
+| `getAssignmentAnalysis(instructorId)` | `AssignmentDifficultyRow[]`: per-assignment student counts, status breakdown, acceptance rate (based on latest submission per student) |
+| `getAtRiskStudents(instructorId)` | `AtRiskStudent[]`: students with ≥2 assignments currently at needs_improvement on their latest submission |
+
 ## AI
 
 POST /api/ai/assignment-improve
