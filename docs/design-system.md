@@ -471,6 +471,7 @@ Assignment-specific components live in `src/components/assignments/`:
 | `StatusDonutChart` | `analytics/StatusDonutChart.tsx` | Recharts donut chart for submission status distribution. Props: `data: StatusDistribution`. Client component. Shows "No submissions yet" empty state. |
 | `AssignmentAnalysisTable` | `analytics/AssignmentAnalysisTable.tsx` | Table of all assignments with difficulty, student count, needs-improvement count, accepted count, and acceptance rate with inline progress bars. Sorted by most struggle. Client component. |
 | `AtRiskStudentsTable` | `analytics/AtRiskStudentsTable.tsx` | Table of students with ≥2 latest submissions at needs_improvement. Shows name, email, count, total submissions, last active. Client component. |
+| `StudentProgressChart` | `analytics/StudentProgressChart.tsx` | Student-facing progress visualization. Stacked horizontal bar + horizontal bar chart (Recharts). Shows accepted / needs improvement / pending / not started distribution across all active assignments. Props: `data: StudentProgressDistribution`. Client component. |
 
 Layout components live in `src/components/layout/`:
 

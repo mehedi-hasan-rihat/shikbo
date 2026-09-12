@@ -195,6 +195,176 @@ export async function getAssignmentAnalysis(
 }
 
 // ---------------------------------------------------------------------------
+// Student overview metrics (SHK-041)
+// ---------------------------------------------------------------------------
+
+export type StudentOverviewMetrics = {
+  totalActiveAssignments: number; // all non-archived assignments
+  submitted: number;              // assignments the student has submitted at least once
+  accepted: number;               // latest submission is accepted
+  needsImprovement: number;       // latest submission is needs_improvement
+  pending: number;                // latest submission is pending
+  notStarted: number;             // no submission at all
+};
+
+export async function getStudentOverviewMetrics(
+  studentId: string
+): Promise<StudentOverviewMetrics> {
+  const [totalActiveAssignments, submissions] = await Promise.all([
+    db.assignment.count({ where: { archivedAt: null } }),
+    db.submission.findMany({
+      where: { studentId },
+      select: { assignmentId: true, status: true, submittedAt: true },
+      orderBy: { submittedAt: "desc" },
+    }),
+  ]);
+
+  // Latest submission per assignment
+  const latestByAssignment = new Map<string, { status: string }>();
+  for (const sub of submissions) {
+    if (!latestByAssignment.has(sub.assignmentId)) {
+      latestByAssignment.set(sub.assignmentId, { status: sub.status });
+    }
+  }
+
+  const latest = [...latestByAssignment.values()];
+  const submitted = latest.length;
+  const accepted = latest.filter((s) => s.status === "accepted").length;
+  const needsImprovement = latest.filter(
+    (s) => s.status === "needs_improvement"
+  ).length;
+  const pending = latest.filter((s) => s.status === "pending").length;
+
+  return {
+    totalActiveAssignments,
+    submitted,
+    accepted,
+    needsImprovement,
+    pending,
+    notStarted: Math.max(0, totalActiveAssignments - submitted),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Student progress distribution (SHK-042)
+// ---------------------------------------------------------------------------
+
+export type StudentProgressDistribution = {
+  accepted: number;        // "completed"
+  needs_improvement: number;
+  pending: number;         // "in progress / awaiting review"
+  not_started: number;
+  total: number;           // totalActiveAssignments
+};
+
+export async function getStudentProgressDistribution(
+  studentId: string
+): Promise<StudentProgressDistribution> {
+  const metrics = await getStudentOverviewMetrics(studentId);
+  return {
+    accepted: metrics.accepted,
+    needs_improvement: metrics.needsImprovement,
+    pending: metrics.pending,
+    not_started: metrics.notStarted,
+    total: metrics.totalActiveAssignments,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Recent feedback (SHK-042)
+// ---------------------------------------------------------------------------
+
+export type RecentFeedbackItem = {
+  submissionId: string;
+  assignmentId: string;
+  assignmentTitle: string;
+  status: "accepted" | "needs_improvement" | "pending";
+  feedback: string;
+  reviewedAt: Date;
+};
+
+export async function getStudentRecentFeedback(
+  studentId: string,
+  limit = 3
+): Promise<RecentFeedbackItem[]> {
+  const submissions = await db.submission.findMany({
+    where: {
+      studentId,
+      feedback: { not: null },
+      reviewedAt: { not: null },
+    },
+    orderBy: { reviewedAt: "desc" },
+    take: limit,
+    select: {
+      id: true,
+      assignmentId: true,
+      status: true,
+      feedback: true,
+      reviewedAt: true,
+      assignment: { select: { title: true } },
+    },
+  });
+
+  return submissions.map((s) => ({
+    submissionId: s.id,
+    assignmentId: s.assignmentId,
+    assignmentTitle: s.assignment.title,
+    status: s.status,
+    feedback: s.feedback!,
+    reviewedAt: s.reviewedAt!,
+  }));
+}
+
+// ---------------------------------------------------------------------------
+// Upcoming deadlines (SHK-043)
+// ---------------------------------------------------------------------------
+
+export type UpcomingAssignment = {
+  assignmentId: string;
+  title: string;
+  difficulty: "beginner" | "intermediate" | "advanced";
+  deadline: Date;
+  isPast: boolean;
+  submissionStatus: "accepted" | "needs_improvement" | "pending" | null;
+  attemptCount: number;
+};
+
+export async function getStudentUpcomingAssignments(
+  studentId: string
+): Promise<UpcomingAssignment[]> {
+  const assignments = await db.assignment.findMany({
+    where: { archivedAt: null },
+    orderBy: { deadline: "asc" },
+    select: {
+      id: true,
+      title: true,
+      difficulty: true,
+      deadline: true,
+      submissions: {
+        where: { studentId },
+        select: { status: true, submittedAt: true },
+        orderBy: { submittedAt: "desc" },
+      },
+    },
+  });
+
+  const now = new Date();
+
+  return assignments.map((a) => {
+    const latestSub = a.submissions[0] ?? null;
+    return {
+      assignmentId: a.id,
+      title: a.title,
+      difficulty: a.difficulty,
+      deadline: a.deadline,
+      isPast: a.deadline < now,
+      submissionStatus: latestSub ? latestSub.status : null,
+      attemptCount: a.submissions.length,
+    };
+  });
+}
+
+// ---------------------------------------------------------------------------
 // At-risk students: repeated needs_improvement on latest submissions (SHK-040)
 // ---------------------------------------------------------------------------
 

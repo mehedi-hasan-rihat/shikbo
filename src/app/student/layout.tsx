@@ -11,7 +11,6 @@ const studentNav: NavSection[] = [
       { label: "Dashboard", href: "/student/dashboard" },
       { label: "Assignments", href: "/student/assignments" },
       { label: "My Submissions", href: "/student/submissions" },
-      { label: "Progress", href: "/student/progress" },
     ],
   },
 ];
