@@ -1,0 +1,21 @@
+enum SubmissionStatus {
+  pending
+  accepted
+  needs_improvement
+}
+
+model Submission {
+  id           String           @id @default(cuid())
+  assignmentId String
+  studentId    String
+  url          String
+  note         String?
+  status       SubmissionStatus @default(pending)
+  feedback     String?
+  submittedAt  DateTime         @default(now())
+  reviewedAt   DateTime?
+  updatedAt    DateTime         @updatedAt
+
+  assignment Assignment @relation(fields: [assignmentId], references: [id])
+  student    User       @relation(fields: [studentId], references: [id])
+}

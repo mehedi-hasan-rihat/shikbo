@@ -1,0 +1,19 @@
+enum Difficulty {
+  beginner
+  intermediate
+  advanced
+}
+
+model Assignment {
+  id          String     @id @default(cuid())
+  title       String
+  description String
+  deadline    DateTime
+  difficulty  Difficulty
+  createdBy   String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  instructor  User         @relation(fields: [createdBy], references: [id])
+  submissions Submission[]
+}
