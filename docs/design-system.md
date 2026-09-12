@@ -441,6 +441,174 @@ Avoid:
 
 ---
 
+## Reusable Component Library
+
+All shared UI lives in `src/components/ui/`. **Always use these before writing custom markup.**
+If a component does not exist yet, add it here and document it in this file.
+
+| Component | File | Notes |
+|-----------|------|-------|
+| `Button` | `ui/Button.tsx` | Variants: `primary`, `secondary`, `ghost`, `danger`, `danger-ghost`. Sizes: `sm`, `default`, `lg`. Accepts `loading` prop. |
+| `Input` | `ui/Input.tsx` | Wraps a `<input>` with label, hint, and error wired via ARIA. |
+| `Textarea` | `ui/Textarea.tsx` | Same field pattern as Input. |
+| `Select` | `ui/Select.tsx` | Typed `options` array, optional placeholder. |
+| `Card` / `KpiCard` | `ui/Card.tsx` | `Card` variants: `default`, `sm`, `kpi`. Use `KpiCard` for metric surfaces. |
+| `Badge` / `DifficultyBadge` / `StatusBadge` | `ui/Badge.tsx` | Domain-aware wrappers over the base `Badge`. Use `DifficultyBadge` and `StatusBadge` instead of raw badges for domain values. |
+| `Dialog` | `ui/Dialog.tsx` | Accessible modal. Props: `open`, `onClose`, `title`, `description`, `size`, `footer`. Sizes: `sm`, `default`, `lg`, `xl`. |
+| `Tabs` | `ui/Tabs.tsx` | Keyboard-navigable tab set. Pass a `tabs` array with `id`, `label`, `content`. |
+| `Dropdown` | `ui/Dropdown.tsx` | Positioned menu. Pass `trigger`, `groups` (with items), and `align`. |
+| `EmptyState` | `ui/EmptyState.tsx` | Empty list/page state. Props: `title`, `description`, `action`. |
+| `LoadingState` | `ui/LoadingState.tsx` | Skeleton rows. Variants: `list` (default), `page`. |
+| `ErrorState` | `ui/ErrorState.tsx` | Error surface with `role="alert"`. Props: `title`, `message`, `action`. |
+
+Layout components live in `src/components/layout/`:
+
+| Component | File | Notes |
+|-----------|------|-------|
+| `AppSidebar` | `layout/AppSidebar.tsx` | Server component. Composes desktop sidebar + mobile drawer. |
+| `SidebarNav` | `layout/SidebarNav.tsx` | Client component. Active link via `usePathname`. |
+| `UserMenu` | `layout/UserMenu.tsx` | Client dropdown in sidebar footer. Shows initials avatar + role. |
+| `MobileSidebar` | `layout/MobileSidebar.tsx` | Client slide-in drawer. Auto-closes on route change. |
+
+---
+
+## CSS Component Classes
+
+These utility classes are defined in `src/app/globals.css` under `@layer components`.
+Use them directly in JSX instead of rewriting the same styles.
+
+### Layout
+
+| Class | Purpose |
+|-------|---------|
+| `.app-shell` | Root flex wrapper for sidebar + content layouts |
+| `.content-area` | Main content region beside the sidebar |
+| `.page-container` | Standalone page wrapper (max-width + padding) |
+
+### Page structure
+
+| Class | Purpose |
+|-------|---------|
+| `.page-header` | Flex row: title block left, actions right |
+| `.page-title` | `24px`, semibold, primary text |
+| `.page-subtitle` | `14px`, muted |
+
+### Cards
+
+| Class | Purpose |
+|-------|---------|
+| `.card` | Standard card — `surface` bg, border, `8px` radius, `20px` padding |
+| `.card-sm` | Compact card — `16px` padding |
+| `.card-kpi` | KPI/metric card with flex column layout |
+| `.card-kpi__label` | `13px`, muted |
+| `.card-kpi__value` | `24px`, semibold |
+| `.card-kpi__support` | `13px`, secondary |
+
+### Forms
+
+| Class | Purpose |
+|-------|---------|
+| `.field` | Wraps label + input + hint/error |
+| `.field-label` | `13px`, medium |
+| `.field-hint` | `12px`, muted |
+| `.field-error` | `12px`, danger — add `role="alert"` |
+| `.input` | Base text input |
+| `.input--error` | Error state border/ring |
+| `.textarea` | Textarea — inherits `.input` focus styles |
+| `.select` | Styled `<select>` with chevron |
+
+### Buttons
+
+| Class | Purpose |
+|-------|---------|
+| `.btn` | Base button — all variants extend this |
+| `.btn-primary` | Solid primary |
+| `.btn-secondary` | White + border |
+| `.btn-ghost` | Transparent |
+| `.btn-danger` | Solid red |
+| `.btn-danger-ghost` | Text-only red |
+| `.btn-sm` | 32px height |
+| `.btn-lg` | 40px height |
+
+### Badges
+
+| Class | Purpose |
+|-------|---------|
+| `.badge` | Base badge |
+| `.badge-beginner` / `.badge-intermediate` / `.badge-advanced` | Difficulty |
+| `.badge-pending` / `.badge-accepted` / `.badge-needs-improvement` | Submission status |
+| `.badge-neutral` | Generic neutral |
+
+### Tables
+
+| Class | Purpose |
+|-------|---------|
+| `.table-wrapper` | Horizontal scroll container |
+| `.table` | Full-width table with token-based styles |
+
+### Sidebar
+
+| Class | Purpose |
+|-------|---------|
+| `.sidebar` | Fixed 240px sidebar — hidden on mobile via CSS |
+| `.sidebar-nav` | Flex column of nav items |
+| `.sidebar-nav-item` | Single nav link/button — add `.active` or `aria-current="page"` |
+| `.sidebar-section-label` | `12px` uppercase section heading |
+
+### State surfaces
+
+| Class | Purpose |
+|-------|---------|
+| `.callout` | Base inline callout block |
+| `.callout-success` / `.callout-warning` / `.callout-danger` / `.callout-info` | Semantic variants |
+| `.empty-state` | Centered empty state container |
+| `.empty-state__title` | `14px`, medium |
+| `.empty-state__description` | `13px`, muted, max 320px |
+| `.skeleton` | Pulsing loading placeholder |
+| `.sr-only` | Screen-reader-only (visually hidden) |
+
+### Overlays
+
+| Class | Purpose |
+|-------|---------|
+| `.dialog-backdrop` | Fixed full-screen backdrop |
+| `.dialog` | Modal container — default max 480px |
+| `.dialog-sm` / `.dialog-lg` / `.dialog-xl` | Size variants |
+| `.dialog-header` / `.dialog-body` / `.dialog-footer` | Dialog sections |
+| `.dialog-title` / `.dialog-description` | Dialog typography |
+| `.dropdown-menu` | Positioned dropdown surface |
+| `.dropdown-item` | Menu item |
+| `.dropdown-item-danger` | Danger-tinted menu item |
+| `.dropdown-separator` | Horizontal rule between groups |
+
+### Tabs
+
+| Class | Purpose |
+|-------|---------|
+| `.tabs` | Tabs wrapper |
+| `.tabs-list` | Tab button row (border-bottom) |
+| `.tabs-trigger` | Single tab button — add `.active` or `aria-selected="true"` |
+| `.tabs-panel` | Tab content panel |
+
+### Responsive utilities
+
+| Class | Behavior |
+|-------|---------|
+| `.mobile-nav-wrapper` | Hidden on desktop; shows mobile top bar + drawer |
+| `.grid-cols-responsive` | Collapses to 1 column below 768px |
+
+---
+
+## Responsive Breakpoints
+
+| Breakpoint | Behavior |
+|-----------|---------|
+| ≥ 1025px (desktop) | Sidebar visible; `.mobile-nav-wrapper` hidden |
+| 769–1024px (tablet) | Sidebar narrows to 200px |
+| ≤ 768px (mobile) | Sidebar hidden; `.mobile-nav-wrapper` shown; `.content-area` padding reduced; `.page-header` stacks vertically |
+
+---
+
 ## Implementation Rules
 
 1. All color, spacing, typography, radius, and shadow values must
@@ -448,9 +616,11 @@ Avoid:
 2. Do not hardcode hex values, pixel values, or arbitrary numbers
    inside individual components when a token exists.
 3. Tokens are defined as CSS custom properties on `:root`.
-4. Tailwind config should map to these tokens so utility classes
-   consume the same semantic values.
-5. When adding a new component, verify it passes the design rule:
+4. Tailwind config maps to these tokens so utility classes consume the same semantic values.
+5. **Use existing components from `src/components/ui/` before writing custom markup.**
+   Adding a new pattern? Add the component to `src/components/ui/`, then document it here.
+6. **Adding or changing a CSS class in `globals.css`? Update the class table in this file.**
+7. When adding a new component, verify it passes the design rule:
    **every visual decision must improve information hierarchy or usability.**
 
 ---

@@ -16,16 +16,20 @@
 
 ## Assignment
 
-| Field      | Type     | Notes                                    |
-|-----------|----------|------------------------------------------|
-| id        | string   | Primary key                              |
-| title     | string   |                                          |
-| description | text   |                                          |
-| deadline  | datetime |                                          |
-| difficulty | enum    | `beginner` \| `intermediate` \| `advanced` |
-| createdBy | string   | FK → User (instructor)                   |
-| createdAt | datetime |                                          |
-| updatedAt | datetime |                                          |
+| Field      | Type     | Notes                                                    |
+|-----------|----------|----------------------------------------------------------|
+| id        | string   | Primary key                                              |
+| title     | string   |                                                          |
+| description | text   |                                                          |
+| deadline  | datetime |                                                          |
+| difficulty | enum    | `beginner` \| `intermediate` \| `advanced`               |
+| createdBy | string   | FK → User (instructor)                                   |
+| createdAt | datetime |                                                          |
+| updatedAt | datetime |                                                          |
+| archivedAt | datetime | Nullable. Null = active; set = soft-deleted/archived.   |
+
+Assignments with submissions are never hard-deleted. Setting `archivedAt` hides them
+from the active list while preserving submission history.
 
 ---
 

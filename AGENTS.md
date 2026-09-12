@@ -44,7 +44,10 @@ Read the relevant file before working on any area of the codebase.
 | New status or difficulty enum value              | `docs/product.md` + `docs/data-model.md`      |
 | Architecture decision or coding standard change  | `docs/engineering.md`                         |
 | AI feature, rule, or flow change                 | `docs/ai.md`                                  |
-| Design token or component guideline change       | `docs/design-system.md`                       |
+| New CSS class added to `globals.css`             | `docs/design-system.md` — add to class table  |
+| New component added to `src/components/ui/`      | `docs/design-system.md` — add to component table |
+| Design token added or changed                    | `docs/design-system.md`                       |
+| Responsive breakpoint or layout rule changed     | `docs/design-system.md`                       |
 
 ---
 
@@ -96,10 +99,16 @@ These are non-negotiable. Violating any of them is a bug.
 ## Design Rules
 
 The UI is a professional internal tool — not a marketing page.
-Full token system is in `docs/design-system.md`.
+Full token system and component inventory are in `docs/design-system.md`.
 
 Key rules:
 - Use CSS custom property tokens. Do not hardcode hex values, spacing, or radii.
+- **Always use existing components from `src/components/ui/` before writing custom markup.**
+  Check `docs/design-system.md` → "Reusable Component Library" for the full list.
+- **Always use existing CSS classes from `globals.css` before writing inline styles.**
+  Check `docs/design-system.md` → "CSS Component Classes" for the full list.
+- When you add a new component to `src/components/ui/` or a new class to `globals.css`,
+  update `docs/design-system.md` in the same change.
 - White/light gray base. Semantic colors for state only.
 - No gradients, glassmorphism, neon colors, or decorative shadows.
 - No oversized typography, giant icons, or pill-shaped everything.
@@ -119,4 +128,8 @@ Before marking any feature done:
 - [ ] Authorization verified server-side
 - [ ] Loading, empty, and error states handled
 - [ ] Design tokens used (no hardcoded values)
+- [ ] Existing `src/components/ui/` components used where applicable
+- [ ] New components or CSS classes documented in `docs/design-system.md`
+- [ ] Schema changes reflected in `docs/data-model.md`
+- [ ] API changes reflected in `docs/api.md`
 - [ ] Relevant logic tested
