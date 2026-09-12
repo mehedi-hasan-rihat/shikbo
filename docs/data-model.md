@@ -1,0 +1,57 @@
+# Shikbo — Data Model
+
+## User
+
+| Field        | Type     | Notes                  |
+|-------------|----------|------------------------|
+| id          | string   | Primary key            |
+| name        | string   |                        |
+| email       | string   | Unique                 |
+| passwordHash| string   |                        |
+| role        | enum     | `instructor` \| `student` |
+| createdAt   | datetime |                        |
+| updatedAt   | datetime |                        |
+
+---
+
+## Assignment
+
+| Field      | Type     | Notes                                    |
+|-----------|----------|------------------------------------------|
+| id        | string   | Primary key                              |
+| title     | string   |                                          |
+| description | text   |                                          |
+| deadline  | datetime |                                          |
+| difficulty | enum    | `beginner` \| `intermediate` \| `advanced` |
+| createdBy | string   | FK → User (instructor)                   |
+| createdAt | datetime |                                          |
+| updatedAt | datetime |                                          |
+
+---
+
+## Submission
+
+| Field       | Type     | Notes                                              |
+|------------|----------|----------------------------------------------------|
+| id         | string   | Primary key                                        |
+| assignmentId | string | FK → Assignment                                   |
+| studentId  | string   | FK → User (student)                                |
+| url        | string   | Submitted work URL                                 |
+| note       | text     | Optional student note                              |
+| status     | enum     | `pending` \| `accepted` \| `needs_improvement`    |
+| feedback   | text     | Instructor feedback                                |
+| submittedAt | datetime |                                                   |
+| reviewedAt | datetime | Nullable                                           |
+| updatedAt  | datetime |                                                   |
+
+---
+
+## Relationships
+
+- `User` 1 → N `Assignment` (only instructors create assignments)
+- `User` 1 → N `Submission` (only students create submissions)
+- `Assignment` 1 → N `Submission`
+
+A student may submit multiple times per assignment.
+Only the latest active submission is treated as current.
+Submission history is preserved.
