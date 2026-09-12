@@ -1,26 +1,909 @@
 @import "tailwindcss";
 
+/* ============================================================
+   SHIKBO DESIGN SYSTEM
+   All visual values come from tokens defined here.
+   Do not hardcode colors, spacing, radii, or shadows
+   inside components when a token already exists.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   CSS CUSTOM PROPERTIES — DESIGN TOKENS
+   ------------------------------------------------------------ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* --- Background --- */
+  --background:        #ffffff;
+  --background-subtle: #fafafa;
+  --background-muted:  #f5f5f5;
+  --background-hover:  #f8f8f8;
+  --background-active: #f3f4f6;
+
+  /* --- Surface --- */
+  --surface:        #ffffff;
+  --surface-subtle: #fcfcfc;
+  --surface-hover:  #fafafa;
+
+  /* --- Border --- */
+  --border:        #e5e7eb;
+  --border-subtle: #ececec;
+  --border-strong: #d1d5db;
+
+  /* --- Text --- */
+  --text-primary:   #111827;
+  --text-secondary: #4b5563;
+  --text-muted:     #6b7280;
+  --text-disabled:  #9ca3af;
+  --text-inverse:   #ffffff;
+
+  /* --- Primary --- */
+  --primary:            #2563eb;
+  --primary-hover:      #1d4ed8;
+  --primary-active:     #1e40af;
+  --primary-subtle:     #eff6ff;
+  --primary-foreground: #ffffff;
+
+  /* --- Success --- */
+  --success:            #16a34a;
+  --success-subtle:     #f0fdf4;
+  --success-border:     #bbf7d0;
+  --success-foreground: #166534;
+
+  /* --- Warning --- */
+  --warning:            #d97706;
+  --warning-subtle:     #fffbeb;
+  --warning-border:     #fde68a;
+  --warning-foreground: #92400e;
+
+  /* --- Danger --- */
+  --danger:            #dc2626;
+  --danger-subtle:     #fef2f2;
+  --danger-border:     #fecaca;
+  --danger-foreground: #991b1b;
+
+  /* --- Info --- */
+  --info:            #2563eb;
+  --info-subtle:     #eff6ff;
+  --info-border:     #bfdbfe;
+  --info-foreground: #1e40af;
+
+  /* --- Difficulty (semantic, not decorative) --- */
+  --difficulty-beginner:        #16a34a;
+  --difficulty-beginner-bg:     #f0fdf4;
+  --difficulty-intermediate:    #2563eb;
+  --difficulty-intermediate-bg: #eff6ff;
+  --difficulty-advanced:        #d97706;
+  --difficulty-advanced-bg:     #fffbeb;
+
+  /* --- Submission Status --- */
+  --status-pending:              #6b7280;
+  --status-pending-bg:           #f3f4f6;
+  --status-accepted:             #16a34a;
+  --status-accepted-bg:          #f0fdf4;
+  --status-needs-improvement:    #d97706;
+  --status-needs-improvement-bg: #fffbeb;
+
+  /* --- Typography --- */
+  --font-sans: "Inter", "Geist", ui-sans-serif, system-ui, sans-serif;
+
+  --font-xs:   12px;
+  --font-sm:   13px;
+  --font-base: 14px;
+  --font-md:   15px;
+  --font-lg:   16px;
+  --font-xl:   20px;
+  --font-2xl:  24px;
+  --font-3xl:  30px;
+
+  --font-regular:  400;
+  --font-medium:   500;
+  --font-semibold: 600;
+  --font-bold:     700;
+
+  --leading-tight:   1.2;
+  --leading-snug:    1.35;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.6;
+
+  /* --- Spacing (4px base scale) --- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* --- Border Radius --- */
+  --radius-sm: 4px;
+  --radius-md: 6px;  /* default for controls */
+  --radius-lg: 8px;  /* cards and panels */
+  --radius-xl: 10px;
+
+  /* --- Shadows --- */
+  --shadow-none: none;
+  --shadow-sm:   0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:   0 4px 12px rgba(0, 0, 0, 0.06);
 }
+
+/* ------------------------------------------------------------
+   TAILWIND v4 THEME — maps tokens to Tailwind utility classes
+   ------------------------------------------------------------ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  /* Font family */
+  --font-sans: var(--font-geist-sans), "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
+
+  /* Colors — background */
+  --color-background:        var(--background);
+  --color-background-subtle: var(--background-subtle);
+  --color-background-muted:  var(--background-muted);
+  --color-background-hover:  var(--background-hover);
+  --color-background-active: var(--background-active);
+
+  /* Colors — surface */
+  --color-surface:        var(--surface);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-hover:  var(--surface-hover);
+
+  /* Colors — border */
+  --color-border:        var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+
+  /* Colors — text */
+  --color-text-primary:   var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted:     var(--text-muted);
+  --color-text-disabled:  var(--text-disabled);
+  --color-text-inverse:   var(--text-inverse);
+
+  /* Colors — primary */
+  --color-primary:            var(--primary);
+  --color-primary-hover:      var(--primary-hover);
+  --color-primary-active:     var(--primary-active);
+  --color-primary-subtle:     var(--primary-subtle);
+  --color-primary-foreground: var(--primary-foreground);
+
+  /* Colors — success */
+  --color-success:            var(--success);
+  --color-success-subtle:     var(--success-subtle);
+  --color-success-border:     var(--success-border);
+  --color-success-foreground: var(--success-foreground);
+
+  /* Colors — warning */
+  --color-warning:            var(--warning);
+  --color-warning-subtle:     var(--warning-subtle);
+  --color-warning-border:     var(--warning-border);
+  --color-warning-foreground: var(--warning-foreground);
+
+  /* Colors — danger */
+  --color-danger:            var(--danger);
+  --color-danger-subtle:     var(--danger-subtle);
+  --color-danger-border:     var(--danger-border);
+  --color-danger-foreground: var(--danger-foreground);
+
+  /* Colors — info */
+  --color-info:            var(--info);
+  --color-info-subtle:     var(--info-subtle);
+  --color-info-border:     var(--info-border);
+  --color-info-foreground: var(--info-foreground);
+
+  /* Colors — difficulty */
+  --color-difficulty-beginner:        var(--difficulty-beginner);
+  --color-difficulty-beginner-bg:     var(--difficulty-beginner-bg);
+  --color-difficulty-intermediate:    var(--difficulty-intermediate);
+  --color-difficulty-intermediate-bg: var(--difficulty-intermediate-bg);
+  --color-difficulty-advanced:        var(--difficulty-advanced);
+  --color-difficulty-advanced-bg:     var(--difficulty-advanced-bg);
+
+  /* Colors — status */
+  --color-status-pending:              var(--status-pending);
+  --color-status-pending-bg:           var(--status-pending-bg);
+  --color-status-accepted:             var(--status-accepted);
+  --color-status-accepted-bg:          var(--status-accepted-bg);
+  --color-status-needs-improvement:    var(--status-needs-improvement);
+  --color-status-needs-improvement-bg: var(--status-needs-improvement-bg);
+
+  /* Spacing */
+  --spacing-1:  var(--space-1);
+  --spacing-2:  var(--space-2);
+  --spacing-3:  var(--space-3);
+  --spacing-4:  var(--space-4);
+  --spacing-5:  var(--space-5);
+  --spacing-6:  var(--space-6);
+  --spacing-8:  var(--space-8);
+  --spacing-10: var(--space-10);
+  --spacing-12: var(--space-12);
+  --spacing-16: var(--space-16);
+
+  /* Border radius */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  /* Shadows */
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+
+  /* Font sizes */
+  --text-xs:   var(--font-xs);
+  --text-sm:   var(--font-sm);
+  --text-base: var(--font-base);
+  --text-md:   var(--font-md);
+  --text-lg:   var(--font-lg);
+  --text-xl:   var(--font-xl);
+  --text-2xl:  var(--font-2xl);
+  --text-3xl:  var(--font-3xl);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ------------------------------------------------------------
+   BASE RESET & DOCUMENT DEFAULTS
+   ------------------------------------------------------------ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-base);
+  font-weight: var(--font-regular);
+  line-height: var(--leading-normal);
+  min-height: 100dvh;
 }
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-snug);
+  color: var(--text-primary);
+}
+
+h1 { font-size: var(--font-3xl); }
+h2 { font-size: var(--font-2xl); }
+h3 { font-size: var(--font-xl);  }
+h4 { font-size: var(--font-lg);  }
+h5 { font-size: var(--font-base); }
+h6 { font-size: var(--font-sm);  }
+
+/* Links */
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+/* Focus ring — applied to all interactive elements */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ------------------------------------------------------------
+   UTILITY LAYER — reusable component classes via @layer
+   ------------------------------------------------------------ */
+
+@layer components {
+
+  /* ----------------------------------------------------------
+     LAYOUT
+     ---------------------------------------------------------- */
+
+  /* Page wrapper: constrains max width and applies page padding */
+  .page-container {
+    width: 100%;
+    max-width: 1400px;
+    margin-inline: auto;
+    padding-inline: var(--space-6);
+    padding-block: var(--space-8);
+  }
+
+  /* Content area beside sidebar */
+  .content-area {
+    flex: 1;
+    min-width: 0;
+    padding-inline: var(--space-8);
+    padding-block: var(--space-8);
+  }
+
+  /* ----------------------------------------------------------
+     CARDS
+     ---------------------------------------------------------- */
+
+  /* Base card — data container, not marketing component */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+  }
+
+  /* Compact card variant */
+  .card-sm {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+  }
+
+  /* KPI / metric card */
+  .card-kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .card-kpi__label {
+    font-size: var(--font-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-muted);
+    line-height: var(--leading-tight);
+  }
+
+  .card-kpi__value {
+    font-size: var(--font-2xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    line-height: var(--leading-tight);
+  }
+
+  .card-kpi__support {
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    line-height: var(--leading-tight);
+  }
+
+  /* ----------------------------------------------------------
+     BUTTONS
+     ---------------------------------------------------------- */
+
+  /* Base button — all variants extend this */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: 36px;
+    padding-inline: var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: var(--font-sm);
+    font-weight: var(--font-medium);
+    line-height: 1;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background-color 150ms ease, color 150ms ease,
+                border-color 150ms ease, opacity 150ms ease;
+    white-space: nowrap;
+    user-select: none;
+    text-decoration: none;
+  }
+
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Size variants */
+  .btn-sm {
+    height: 32px;
+    padding-inline: var(--space-3);
+    font-size: var(--font-xs);
+  }
+
+  .btn-lg {
+    height: 40px;
+    padding-inline: var(--space-5);
+    font-size: var(--font-base);
+  }
+
+  /* Primary — solid fill */
+  .btn-primary {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border-color: var(--primary);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+  }
+  .btn-primary:active:not(:disabled) {
+    background-color: var(--primary-active);
+    border-color: var(--primary-active);
+  }
+
+  /* Secondary — white + border */
+  .btn-secondary {
+    background-color: var(--surface);
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background-color: var(--background-hover);
+    border-color: var(--border);
+  }
+  .btn-secondary:active:not(:disabled) {
+    background-color: var(--background-active);
+  }
+
+  /* Ghost — transparent */
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border-color: transparent;
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background-color: var(--background-hover);
+    color: var(--text-primary);
+  }
+  .btn-ghost:active:not(:disabled) {
+    background-color: var(--background-active);
+  }
+
+  /* Danger */
+  .btn-danger {
+    background-color: var(--danger);
+    color: var(--danger-foreground);
+    border-color: var(--danger);
+  }
+  .btn-danger:hover:not(:disabled) {
+    background-color: #b91c1c;
+    border-color: #b91c1c;
+  }
+  .btn-danger:active:not(:disabled) {
+    background-color: #991b1b;
+    border-color: #991b1b;
+  }
+
+  /* Danger ghost — text only, no fill */
+  .btn-danger-ghost {
+    background-color: transparent;
+    color: var(--danger);
+    border-color: transparent;
+  }
+  .btn-danger-ghost:hover:not(:disabled) {
+    background-color: var(--danger-subtle);
+  }
+
+  /* ----------------------------------------------------------
+     INPUTS & FORMS
+     ---------------------------------------------------------- */
+
+  /* Base input */
+  .input {
+    display: block;
+    width: 100%;
+    height: 36px;
+    padding-inline: var(--space-3);
+    background-color: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    font-size: var(--font-base);
+    color: var(--text-primary);
+    line-height: var(--leading-normal);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+    outline: none;
+  }
+
+  .input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+
+  .input:disabled {
+    background-color: var(--background-muted);
+    color: var(--text-disabled);
+    cursor: not-allowed;
+  }
+
+  .input--error {
+    border-color: var(--danger);
+  }
+  .input--error:focus {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+  }
+
+  /* Textarea */
+  .textarea {
+    display: block;
+    width: 100%;
+    min-height: 80px;
+    padding: var(--space-3);
+    background-color: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    font-size: var(--font-base);
+    font-family: inherit;
+    color: var(--text-primary);
+    line-height: var(--leading-normal);
+    resize: vertical;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+    outline: none;
+  }
+
+  .textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  .textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+
+  /* Select */
+  .select {
+    display: block;
+    width: 100%;
+    height: 36px;
+    padding-inline: var(--space-3);
+    background-color: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    font-size: var(--font-base);
+    color: var(--text-primary);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--space-3) center;
+    padding-right: var(--space-8);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+    outline: none;
+  }
+
+  .select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  }
+
+  /* Form field wrapper */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .field-label {
+    font-size: var(--font-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+    line-height: var(--leading-tight);
+  }
+
+  .field-hint {
+    font-size: var(--font-xs);
+    color: var(--text-muted);
+    line-height: var(--leading-snug);
+  }
+
+  .field-error {
+    font-size: var(--font-xs);
+    color: var(--danger);
+    line-height: var(--leading-snug);
+  }
+
+  /* ----------------------------------------------------------
+     BADGES
+     ---------------------------------------------------------- */
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding-inline: var(--space-2);
+    border-radius: var(--radius-md);
+    font-size: var(--font-xs);
+    font-weight: var(--font-medium);
+    line-height: 1;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+
+  /* Difficulty badges */
+  .badge-beginner {
+    color: var(--difficulty-beginner);
+    background-color: var(--difficulty-beginner-bg);
+    border-color: var(--success-border);
+  }
+
+  .badge-intermediate {
+    color: var(--difficulty-intermediate);
+    background-color: var(--difficulty-intermediate-bg);
+    border-color: var(--info-border);
+  }
+
+  .badge-advanced {
+    color: var(--difficulty-advanced);
+    background-color: var(--difficulty-advanced-bg);
+    border-color: var(--warning-border);
+  }
+
+  /* Status badges */
+  .badge-pending {
+    color: var(--status-pending);
+    background-color: var(--status-pending-bg);
+    border-color: var(--border);
+  }
+
+  .badge-accepted {
+    color: var(--status-accepted);
+    background-color: var(--status-accepted-bg);
+    border-color: var(--success-border);
+  }
+
+  .badge-needs-improvement {
+    color: var(--status-needs-improvement);
+    background-color: var(--status-needs-improvement-bg);
+    border-color: var(--warning-border);
+  }
+
+  /* Neutral badge */
+  .badge-neutral {
+    color: var(--text-secondary);
+    background-color: var(--background-muted);
+    border-color: var(--border);
+  }
+
+  /* ----------------------------------------------------------
+     TABLE
+     ---------------------------------------------------------- */
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--font-base);
+    color: var(--text-primary);
+  }
+
+  .table thead tr th {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--font-xs);
+    font-weight: var(--font-medium);
+    color: var(--text-muted);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--background-subtle);
+    white-space: nowrap;
+  }
+
+  .table tbody tr {
+    transition: background-color 150ms ease;
+  }
+
+  .table tbody tr:hover {
+    background-color: var(--background-hover);
+  }
+
+  .table tbody tr td {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: middle;
+    min-height: 52px;
+    line-height: var(--leading-normal);
+  }
+
+  .table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ----------------------------------------------------------
+     SIDEBAR
+     ---------------------------------------------------------- */
+
+  .sidebar {
+    width: 240px;
+    min-width: 240px;
+    background-color: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-2);
+  }
+
+  .sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    height: 36px;
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-md);
+    font-size: var(--font-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: background-color 150ms ease, color 150ms ease;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+  }
+
+  .sidebar-nav-item:hover {
+    background-color: var(--background-hover);
+    color: var(--text-primary);
+  }
+
+  .sidebar-nav-item.active,
+  .sidebar-nav-item[aria-current="page"] {
+    background-color: var(--background-active);
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+  }
+
+  .sidebar-section-label {
+    font-size: var(--font-xs);
+    font-weight: var(--font-medium);
+    color: var(--text-disabled);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: var(--space-3) var(--space-3) var(--space-1);
+  }
+
+  /* ----------------------------------------------------------
+     PAGE HEADER
+     ---------------------------------------------------------- */
+
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .page-title {
+    font-size: var(--font-2xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    line-height: var(--leading-tight);
+  }
+
+  .page-subtitle {
+    font-size: var(--font-base);
+    color: var(--text-muted);
+    margin-top: var(--space-1);
+    line-height: var(--leading-normal);
+  }
+
+  /* ----------------------------------------------------------
+     DIVIDER
+     ---------------------------------------------------------- */
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--border);
+    border: none;
+  }
+
+  /* ----------------------------------------------------------
+     SEMANTIC STATE SURFACES
+     Inline alerts / callout blocks
+     ---------------------------------------------------------- */
+
+  .callout {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid;
+    font-size: var(--font-sm);
+    line-height: var(--leading-normal);
+  }
+
+  .callout-success {
+    background-color: var(--success-subtle);
+    border-color: var(--success-border);
+    color: var(--success-foreground);
+  }
+
+  .callout-warning {
+    background-color: var(--warning-subtle);
+    border-color: var(--warning-border);
+    color: var(--warning-foreground);
+  }
+
+  .callout-danger {
+    background-color: var(--danger-subtle);
+    border-color: var(--danger-border);
+    color: var(--danger-foreground);
+  }
+
+  .callout-info {
+    background-color: var(--info-subtle);
+    border-color: var(--info-border);
+    color: var(--info-foreground);
+  }
+
+  /* ----------------------------------------------------------
+     EMPTY STATE
+     ---------------------------------------------------------- */
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-12) var(--space-6);
+    text-align: center;
+  }
+
+  .empty-state__title {
+    font-size: var(--font-base);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+  }
+
+  .empty-state__description {
+    font-size: var(--font-sm);
+    color: var(--text-muted);
+    max-width: 320px;
+    line-height: var(--leading-relaxed);
+  }
+
+  /* ----------------------------------------------------------
+     SKELETON / LOADING
+     ---------------------------------------------------------- */
+
+  .skeleton {
+    background-color: var(--background-muted);
+    border-radius: var(--radius-md);
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.5; }
+  }
+
+} /* end @layer components */
