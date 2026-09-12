@@ -22,6 +22,13 @@ GET /api/submissions/my
 GET /api/instructor/submissions
 PATCH /api/submissions/:id/review
 
+### Server Actions (student)
+
+`createSubmission(assignmentId, state, formData)` — creates a new Submission record for the
+authenticated student. Validates: authenticated student, assignment exists + active + deadline
+not passed, URL required and must be http/https, note optional max 2,000 chars. On success
+redirects to `/student/assignments/:id`.
+
 ## Analytics
 
 GET /api/instructor/analytics

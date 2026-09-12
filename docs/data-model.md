@@ -40,11 +40,11 @@ from the active list while preserving submission history.
 | id         | string   | Primary key                                        |
 | assignmentId | string | FK → Assignment                                   |
 | studentId  | string   | FK → User (student)                                |
-| url        | string   | Submitted work URL                                 |
-| note       | text     | Optional student note                              |
-| status     | enum     | `pending` \| `accepted` \| `needs_improvement`    |
-| feedback   | text     | Instructor feedback                                |
-| submittedAt | datetime |                                                   |
+| url        | string   | Submitted work URL (max 2,000 chars, must be http/https) |
+| note       | text     | Optional student note (max 2,000 chars)            |
+| status     | enum     | `pending` \| `accepted` \| `needs_improvement`; defaults to `pending` |
+| feedback   | text     | Nullable. Instructor feedback                      |
+| submittedAt | datetime | Defaults to `now()`                               |
 | reviewedAt | datetime | Nullable                                           |
 | updatedAt  | datetime |                                                   |
 

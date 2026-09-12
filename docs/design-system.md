@@ -461,6 +461,13 @@ If a component does not exist yet, add it here and document it in this file.
 | `LoadingState` | `ui/LoadingState.tsx` | Skeleton rows. Variants: `list` (default), `page`. |
 | `ErrorState` | `ui/ErrorState.tsx` | Error surface with `role="alert"`. Props: `title`, `message`, `action`. |
 
+Assignment-specific components live in `src/components/assignments/`:
+
+| Component | File | Notes |
+|-----------|------|-------|
+| `AssignmentForm` | `assignments/AssignmentForm.tsx` | Create/edit assignment form. Props: `action`, `defaultValues`, `submitLabel`. Instructor flows only. |
+| `SubmissionForm` | `assignments/SubmissionForm.tsx` | Student submission form. Fields: URL (required), note (optional). Props: `action`, `defaultUrl`, `defaultNote`, `submitLabel`, `onCancel`. Client component using `useActionState`. |
+
 Layout components live in `src/components/layout/`:
 
 | Component | File | Notes |
