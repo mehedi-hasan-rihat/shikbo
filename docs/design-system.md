@@ -467,6 +467,7 @@ Assignment-specific components live in `src/components/assignments/`:
 |-----------|------|-------|
 | `AssignmentForm` | `assignments/AssignmentForm.tsx` | Create/edit assignment form. Props: `action`, `defaultValues`, `submitLabel`. Instructor flows only. |
 | `SubmissionForm` | `assignments/SubmissionForm.tsx` | Student submission form. Fields: URL (required), note (optional). Props: `action`, `defaultUrl`, `defaultNote`, `submitLabel`, `onCancel`. Client component using `useActionState`. |
+| `ReviewForm` | `submissions/ReviewForm.tsx` | Instructor review form. Fields: status (select), feedback (textarea). Props: `action`, `defaultStatus`, `defaultFeedback`. Client component using `useActionState`. |
 
 Layout components live in `src/components/layout/`:
 

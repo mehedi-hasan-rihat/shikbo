@@ -22,6 +22,13 @@ GET /api/submissions/my
 GET /api/instructor/submissions
 PATCH /api/submissions/:id/review
 
+### Server Actions (instructor)
+
+`reviewSubmission(submissionId, state, formData)` — updates `status`, `feedback`, and `reviewedAt`
+on a Submission. Verifies authenticated instructor owns the assignment before writing.
+Status must be one of `pending | accepted | needs_improvement`. Feedback optional, max 5,000 chars.
+On success redirects to `/instructor/submissions/:id`.
+
 ### Server Actions (student)
 
 `createSubmission(assignmentId, state, formData)` — creates a new Submission record for the
