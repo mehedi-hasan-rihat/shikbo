@@ -58,6 +58,22 @@ POST /api/ai/generate-feedback
 
 All request bodies must be validated.
 
+### Server Actions (instructor)
+
+`improveAssignmentAction(state, formData)` — calls the AI assignment improvement service.
+Input: `title`, `description`, `difficulty`. Returns `ImproveAssignmentState` with `status: "success" | "error"`.
+On success, `data` contains `improvedTitle`, `improvedDescription`, `missingRequirements[]`, `evaluationCriteria[]`.
+Requires authenticated instructor. All inputs validated with Zod.
+
+`generateFeedbackAction(state, formData)` — calls the AI feedback generation service.
+Input: `assignmentTitle`, `assignmentDescription`, `difficulty`, `studentNote`, `instructorObservations`, `submissionStatus`.
+Returns `GenerateFeedbackState` with `status: "success" | "error"`.
+On success, `data` contains `feedback` (draft text) and `improvementSuggestions[]`.
+Requires authenticated instructor. All inputs validated with Zod.
+
+Both actions return a user-friendly `error` string on failure covering: missing API key,
+rate limit, timeout, invalid response, and generic API errors.
+
 All protected endpoints require authentication.
 
 Role restrictions are defined in permissions.md.

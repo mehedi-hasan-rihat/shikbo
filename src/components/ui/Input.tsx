@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import type React from "react";
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
@@ -6,14 +7,10 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   error?: string;
 };
 
-export function Input({
-  label,
-  hint,
-  error,
-  id,
-  className = "",
-  ...props
-}: InputProps) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  { label, hint, error, id, className = "", ...props },
+  ref
+) {
   const inputId = id ?? (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
   const hintId = hint && inputId ? `${inputId}-hint` : undefined;
   const errorId = error && inputId ? `${inputId}-error` : undefined;
@@ -32,6 +29,7 @@ export function Input({
       )}
       <input
         {...props}
+        ref={ref}
         id={inputId}
         aria-describedby={
           [hintId, errorId].filter(Boolean).join(" ") || undefined
@@ -51,4 +49,4 @@ export function Input({
       )}
     </div>
   );
-}
+});

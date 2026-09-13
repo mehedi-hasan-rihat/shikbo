@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import type React from "react";
 
 type SelectOption = {
@@ -14,16 +15,10 @@ type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
   placeholder?: string;
 };
 
-export function Select({
-  label,
-  hint,
-  error,
-  options,
-  placeholder,
-  id,
-  className = "",
-  ...props
-}: SelectProps) {
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
+  { label, hint, error, options, placeholder, id, className = "", ...props },
+  ref
+) {
   const selectId = id ?? (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
   const hintId = hint && selectId ? `${selectId}-hint` : undefined;
   const errorId = error && selectId ? `${selectId}-error` : undefined;
@@ -42,6 +37,7 @@ export function Select({
       )}
       <select
         {...props}
+        ref={ref}
         id={selectId}
         aria-describedby={
           [hintId, errorId].filter(Boolean).join(" ") || undefined
@@ -72,4 +68,4 @@ export function Select({
       )}
     </div>
   );
-}
+});

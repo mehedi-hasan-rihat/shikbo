@@ -239,6 +239,13 @@ export default async function SubmissionReviewPage({
               action={boundAction}
               defaultStatus={submission.status}
               defaultFeedback={submission.feedback ?? ""}
+              aiContext={{
+                assignmentTitle: submission.assignment.title,
+                assignmentDescription: submission.assignment.description,
+                difficulty: submission.assignment.difficulty as "beginner" | "intermediate" | "advanced",
+                studentNote: submission.note,
+                submissionStatus: submission.status as "pending" | "accepted" | "needs_improvement",
+              }}
             />
           </section>
 

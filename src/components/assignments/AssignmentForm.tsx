@@ -1,11 +1,13 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
+import { AssignmentImprovePanel } from "@/components/assignments/AssignmentImprovePanel";
 import type { AssignmentFormState } from "@/server/actions/assignment";
+import type { AssignmentImproveResult } from "@/lib/ai/types";
 
 const DIFFICULTY_OPTIONS = [
   { value: "beginner", label: "Beginner" },
@@ -34,10 +36,29 @@ export function AssignmentForm({
 }: AssignmentFormProps) {
   const [state, formAction, isPending] = useActionState(action, null);
 
+  // Refs to the controlled inputs so the AI panel can read and apply values
+  const titleRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const difficultyRef = useRef<HTMLSelectElement>(null);
+
   // Format deadline for datetime-local input (strip seconds/ms)
   const deadlineValue = defaultValues?.deadline
     ? defaultValues.deadline.slice(0, 16)
     : "";
+
+  const getFormValues = useCallback(() => ({
+    title: titleRef.current?.value ?? "",
+    description: descriptionRef.current?.value ?? "",
+    difficulty: difficultyRef.current?.value ?? "",
+  }), []);
+
+  const handleApplyAi = useCallback((result: AssignmentImproveResult) => {
+    if (titleRef.current) titleRef.current.value = result.improvedTitle;
+    if (descriptionRef.current) descriptionRef.current.value = result.improvedDescription;
+    // Trigger React's synthetic change so the form stays in sync
+    titleRef.current?.dispatchEvent(new Event("input", { bubbles: true }));
+    descriptionRef.current?.dispatchEvent(new Event("input", { bubbles: true }));
+  }, []);
 
   return (
     <form action={formAction} noValidate>
@@ -50,6 +71,7 @@ export function AssignmentForm({
 
       <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)" }}>
         <Input
+          ref={titleRef}
           label="Title"
           name="title"
           id="assignment-title"
@@ -61,6 +83,7 @@ export function AssignmentForm({
         />
 
         <Textarea
+          ref={descriptionRef}
           label="Description"
           name="description"
           id="assignment-description"
@@ -105,6 +128,7 @@ export function AssignmentForm({
           </div>
 
           <Select
+            ref={difficultyRef}
             label="Difficulty"
             name="difficulty"
             id="assignment-difficulty"
@@ -115,6 +139,14 @@ export function AssignmentForm({
             error={state?.errors?.difficulty?.[0]}
           />
         </div>
+      </div>
+
+      {/* AI Improve Panel */}
+      <div style={{ marginTop: "var(--space-5)" }}>
+        <AssignmentImprovePanel
+          getFormValues={getFormValues}
+          onApply={handleApplyAi}
+        />
       </div>
 
       <div
