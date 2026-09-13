@@ -56,14 +56,27 @@ export async function getOverviewMetrics(
     db.submission.findMany({
       where: { assignment: { createdBy: instructorId } },
       select: {
+        studentId: true,
+        assignmentId: true,
         status: true,
         submittedAt: true,
         reviewedAt: true,
       },
+      orderBy: { submittedAt: "desc" },
     }),
   ]);
 
-  const total = submissions.length;
+  // Deduplicate to latest submission per student per assignment
+  const latestByKey = new Map<string, typeof submissions[number]>();
+  for (const sub of submissions) {
+    const key = `${sub.studentId}:${sub.assignmentId}`;
+    if (!latestByKey.has(key)) {
+      latestByKey.set(key, sub);
+    }
+  }
+  const latest = [...latestByKey.values()];
+
+  const total = latest.length;
 
   if (total === 0) {
     return {
@@ -76,13 +89,13 @@ export async function getOverviewMetrics(
     };
   }
 
-  const accepted = submissions.filter((s) => s.status === "accepted").length;
-  const needsImprovement = submissions.filter(
+  const accepted = latest.filter((s) => s.status === "accepted").length;
+  const needsImprovement = latest.filter(
     (s) => s.status === "needs_improvement"
   ).length;
-  const pending = submissions.filter((s) => s.status === "pending").length;
+  const pending = latest.filter((s) => s.status === "pending").length;
 
-  // Average review time across all submissions that have been reviewed
+  // Average review time — across all reviewed submissions (not just latest)
   const reviewed = submissions.filter((s) => s.reviewedAt !== null);
   let avgReviewTimeHours: number | null = null;
   if (reviewed.length > 0) {
@@ -109,20 +122,33 @@ export async function getOverviewMetrics(
 export async function getStatusDistribution(
   instructorId: string
 ): Promise<StatusDistribution> {
-  const counts = await db.submission.groupBy({
-    by: ["status"],
+  const submissions = await db.submission.findMany({
     where: { assignment: { createdBy: instructorId } },
-    _count: { status: true },
+    select: {
+      studentId: true,
+      assignmentId: true,
+      status: true,
+      submittedAt: true,
+    },
+    orderBy: { submittedAt: "desc" },
   });
 
-  const map: Record<string, number> = {};
-  for (const row of counts) {
-    map[row.status] = row._count.status;
+  // Deduplicate to latest submission per student per assignment
+  const latestByKey = new Map<string, typeof submissions[number]>();
+  for (const sub of submissions) {
+    const key = `${sub.studentId}:${sub.assignmentId}`;
+    if (!latestByKey.has(key)) {
+      latestByKey.set(key, sub);
+    }
   }
+  const latest = [...latestByKey.values()];
 
-  const accepted = map["accepted"] ?? 0;
-  const pending = map["pending"] ?? 0;
-  const needs_improvement = map["needs_improvement"] ?? 0;
+  let accepted = 0, pending = 0, needs_improvement = 0;
+  for (const sub of latest) {
+    if (sub.status === "accepted") accepted++;
+    else if (sub.status === "pending") pending++;
+    else if (sub.status === "needs_improvement") needs_improvement++;
+  }
 
   return {
     accepted,

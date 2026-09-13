@@ -37,6 +37,7 @@ export default async function InstructorDashboardPage() {
     ]);
 
   const hasData = overview.totalSubmissions > 0;
+  const now = Date.now();
 
   const totalActionCount =
     (actions.pendingReviewCount > 0 ? 1 : 0) +
@@ -252,7 +253,7 @@ export default async function InstructorDashboardPage() {
               Students needing attention
             </h2>
             <p style={{ fontSize: "var(--font-sm)", color: "var(--text-muted)" }}>
-              Students with 2+ assignments currently at "Needs Improvement".
+              Students with 2+ assignments currently at &ldquo;Needs Improvement&rdquo;.
             </p>
           </div>
           <AtRiskStudentsTable students={atRisk} />
@@ -260,30 +261,150 @@ export default async function InstructorDashboardPage() {
       </div>
 
       {/* ------------------------------------------------------------------ */}
-      {/* Assignment breakdown                                               */}
+      {/* Assignment breakdown + Deadlines this week                        */}
       {/* ------------------------------------------------------------------ */}
-      <section
-        className="card"
-        style={{ padding: 0, overflow: "hidden", marginBottom: "var(--space-5)" }}
+      <div
+        className="grid-cols-responsive"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 320px",
+          gap: "var(--space-5)",
+          marginBottom: "var(--space-5)",
+          alignItems: "start",
+        }}
       >
-        <div style={{ padding: "var(--space-5) var(--space-5) var(--space-4)" }}>
-          <h2
-            style={{
-              fontSize: "var(--font-sm)",
-              fontWeight: "var(--font-semibold)",
-              color: "var(--text-primary)",
-              marginBottom: "var(--space-1)",
-            }}
-          >
-            Assignment breakdown
-          </h2>
-          <p style={{ fontSize: "var(--font-sm)", color: "var(--text-muted)" }}>
-            Based on each student's latest submission. Sorted by most
-            improvement needed.
-          </p>
-        </div>
-        <AssignmentAnalysisTable rows={assignmentRows} />
-      </section>
+        <section className="card" style={{ padding: 0, overflow: "hidden" }}>
+          <div style={{ padding: "var(--space-5) var(--space-5) var(--space-4)" }}>
+            <h2
+              style={{
+                fontSize: "var(--font-sm)",
+                fontWeight: "var(--font-semibold)",
+                color: "var(--text-primary)",
+                marginBottom: "var(--space-1)",
+              }}
+            >
+              Assignment breakdown
+            </h2>
+            <p style={{ fontSize: "var(--font-sm)", color: "var(--text-muted)" }}>
+              Based on each student&apos;s latest submission. Sorted by most improvement needed.
+            </p>
+          </div>
+          <AssignmentAnalysisTable rows={assignmentRows} />
+        </section>
+
+        {/* Deadlines this week */}
+        <section className="card" style={{ padding: 0, overflow: "hidden" }}>
+          <div style={{ padding: "var(--space-5) var(--space-5) var(--space-4)" }}>
+            <h2
+              style={{
+                fontSize: "var(--font-sm)",
+                fontWeight: "var(--font-semibold)",
+                color: "var(--text-primary)",
+                marginBottom: "var(--space-1)",
+              }}
+            >
+              Deadlines this week
+            </h2>
+            <p style={{ fontSize: "var(--font-sm)", color: "var(--text-muted)" }}>
+              Assignments due in the next 7 days.
+            </p>
+          </div>
+
+          {actions.deadlinesThisWeek.length === 0 ? (
+            <div style={{ padding: "var(--space-5)", textAlign: "center" }}>
+              <p style={{ fontSize: "var(--font-sm)", color: "var(--text-muted)" }}>
+                No deadlines in the next 7 days.
+              </p>
+            </div>
+          ) : (
+            <div className="table-wrapper">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Assignment</th>
+                    <th>Deadline</th>
+                    <th>Pending</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {actions.deadlinesThisWeek.map((a) => {
+                    const daysLeft = Math.ceil(
+                      (a.deadline.getTime() - now) / (1000 * 60 * 60 * 24)
+                    );
+                    return (
+                      <tr key={a.assignmentId}>
+                        <td>
+                          <Link
+                            href={`/instructor/assignments/${a.assignmentId}`}
+                            style={{
+                              fontSize: "var(--font-sm)",
+                              fontWeight: "var(--font-medium)",
+                              color: "var(--text-primary)",
+                            }}
+                          >
+                            {a.title}
+                          </Link>
+                        </td>
+                        <td>
+                          <span
+                            style={{
+                              fontSize: "var(--font-sm)",
+                              color:
+                                daysLeft <= 1
+                                  ? "var(--danger)"
+                                  : daysLeft <= 3
+                                    ? "var(--warning)"
+                                    : "var(--text-secondary)",
+                            }}
+                          >
+                            {formatDate(a.deadline)}
+                          </span>
+                          <span
+                            style={{
+                              display: "block",
+                              fontSize: "var(--font-xs)",
+                              color: "var(--text-muted)",
+                              marginTop: 2,
+                            }}
+                          >
+                            {daysLeft <= 0 ? "Today" : daysLeft === 1 ? "1 day left" : `${daysLeft} days left`}
+                          </span>
+                        </td>
+                        <td>
+                          {a.pendingCount > 0 ? (
+                            <span
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                minWidth: 24,
+                                height: 24,
+                                padding: "0 var(--space-2)",
+                                borderRadius: "var(--radius-md)",
+                                fontSize: "var(--font-xs)",
+                                fontWeight: "var(--font-semibold)",
+                                background: "var(--status-pending-bg)",
+                                color: "var(--status-pending)",
+                                border: "1px solid var(--border)",
+                              }}
+                            >
+                              {a.pendingCount}
+                            </span>
+                          ) : (
+                            <span style={{ fontSize: "var(--font-sm)", color: "var(--text-muted)" }}>
+                              —
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+      </div>
 
       {/* ------------------------------------------------------------------ */}
       {/* Recent submissions                                                 */}
