@@ -89,10 +89,11 @@ export function StatusDonutChart({ data }: StatusDonutChartProps) {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: number, name: string) => [
-                `${value} (${Math.round((value / data.total) * 100)}%)`,
-                name,
-              ]}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              formatter={(value: any, name: any) => {
+                const n = typeof value === "number" ? value : 0;
+                return [`${n} (${Math.round((n / data.total) * 100)}%)`, name];
+              }}
               contentStyle={{
                 background: "#fff",
                 border: "1px solid #e5e7eb",

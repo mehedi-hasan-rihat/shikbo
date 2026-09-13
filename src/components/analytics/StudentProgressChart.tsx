@@ -10,7 +10,6 @@ import {
   Cell,
 } from "recharts";
 import type { StudentProgressDistribution } from "@/server/lib/analytics";
-
 type StudentProgressChartProps = {
   data: StudentProgressDistribution;
 };
@@ -171,7 +170,11 @@ export function StudentProgressChart({ data }: StudentProgressChartProps) {
               />
               <Tooltip
                 cursor={{ fill: "rgba(0,0,0,0.03)" }}
-                formatter={(value: number) => [value, "Assignments"]}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              formatter={(value: any) => {
+                const n = typeof value === "number" ? value : 0;
+                return [n, "Assignments"];
+              }}
                 contentStyle={{
                   background: "#fff",
                   border: "1px solid #e5e7eb",
