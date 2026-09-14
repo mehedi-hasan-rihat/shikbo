@@ -99,7 +99,7 @@ export default async function InstructorDashboardPage() {
             )}
 
             {/* Low acceptance assignments */}
-            {actions.lowAcceptanceAssignments.map((a) => (
+            {actions.lowAcceptanceAssignments.map((a: typeof actions.lowAcceptanceAssignments[number]) => (
               <ActionItem
                 key={a.assignmentId}
                 href={`/instructor/assignments/${a.assignmentId}`}
@@ -113,7 +113,7 @@ export default async function InstructorDashboardPage() {
             {actions.deadlinesThisWeek.length > 0 && (
               <ActionItem
                 href="/instructor/assignments"
-                label={`${actions.deadlinesThisWeek.length} assignment${actions.deadlinesThisWeek.length !== 1 ? "s have" : " has"} a deadline this week${actions.deadlinesThisWeek.reduce((n, a) => n + a.pendingCount, 0) > 0 ? ` · ${actions.deadlinesThisWeek.reduce((n, a) => n + a.pendingCount, 0)} submission${actions.deadlinesThisWeek.reduce((n, a) => n + a.pendingCount, 0) !== 1 ? "s" : ""} pending` : ""}`}
+                label={`${actions.deadlinesThisWeek.length} assignment${actions.deadlinesThisWeek.length !== 1 ? "s have" : " has"} a deadline this week${actions.deadlinesThisWeek.reduce((n: number, a: typeof actions.deadlinesThisWeek[number]) => n + a.pendingCount, 0) > 0 ? ` · ${actions.deadlinesThisWeek.reduce((n: number, a: typeof actions.deadlinesThisWeek[number]) => n + a.pendingCount, 0)} submission${actions.deadlinesThisWeek.reduce((n: number, a: typeof actions.deadlinesThisWeek[number]) => n + a.pendingCount, 0) !== 1 ? "s" : ""} pending` : ""}`}
                 kind="info"
                 cta="View assignments"
               />
@@ -327,7 +327,7 @@ export default async function InstructorDashboardPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {actions.deadlinesThisWeek.map((a) => {
+                  {actions.deadlinesThisWeek.map((a: typeof actions.deadlinesThisWeek[number]) => {
                     const daysLeft = Math.ceil(
                       (a.deadline.getTime() - now) / (1000 * 60 * 60 * 24)
                     );
@@ -458,7 +458,7 @@ export default async function InstructorDashboardPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentSubmissions.map((sub) => (
+                  {recentSubmissions.map((sub: typeof recentSubmissions[number]) => (
                     <tr key={sub.id}>
                       <td>
                         <span

@@ -96,10 +96,11 @@ export async function getOverviewMetrics(
   const pending = latest.filter((s) => s.status === "pending").length;
 
   // Average review time — across all reviewed submissions (not just latest)
-  const reviewed = submissions.filter((s) => s.reviewedAt !== null);
+  type SubRow = typeof submissions[number];
+  const reviewed = submissions.filter((s: SubRow) => s.reviewedAt !== null);
   let avgReviewTimeHours: number | null = null;
   if (reviewed.length > 0) {
-    const totalMs = reviewed.reduce((sum, s) => {
+    const totalMs = reviewed.reduce((sum: number, s: SubRow) => {
       return sum + (s.reviewedAt!.getTime() - s.submittedAt.getTime());
     }, 0);
     avgReviewTimeHours = totalMs / reviewed.length / (1000 * 60 * 60);
@@ -184,7 +185,7 @@ export async function getAssignmentAnalysis(
     orderBy: { createdAt: "asc" },
   });
 
-  return assignments.map((a) => {
+  return assignments.map((a: typeof assignments[number]) => {
     const allSubs = a.submissions;
 
     // Latest submission per student determines their "current" status
@@ -436,7 +437,7 @@ export async function getStudentRecentFeedback(
     },
   });
 
-  return submissions.map((s) => ({
+  return submissions.map((s: typeof submissions[number]) => ({
     submissionId: s.id,
     assignmentId: s.assignmentId,
     assignmentTitle: s.assignment.title,
@@ -481,7 +482,7 @@ export async function getStudentUpcomingAssignments(
 
   const now = new Date();
 
-  return assignments.map((a) => {
+  return assignments.map((a: typeof assignments[number]) => {
     const latestSub = a.submissions[0] ?? null;
     return {
       assignmentId: a.id,
@@ -544,7 +545,7 @@ export async function getAtRiskStudents(
 
     const latestSubs = [...latestByAssignment.values()];
     const needsImprovementCount = latestSubs.filter(
-      (s) => s.status === "needs_improvement"
+      (s: typeof latestSubs[number]) => s.status === "needs_improvement"
     ).length;
 
     // Only include students who currently have at least 2 assignments at needs_improvement

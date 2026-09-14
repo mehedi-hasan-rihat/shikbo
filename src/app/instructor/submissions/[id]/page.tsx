@@ -48,7 +48,7 @@ export default async function SubmissionReviewPage({
 
   const attemptNumber =
     allSubmissions.length -
-    allSubmissions.findIndex((s) => s.id === submission.id);
+    allSubmissions.findIndex((s: typeof allSubmissions[number]) => s.id === submission.id);
 
   const isLatest = allSubmissions[0]?.id === submission.id;
 
@@ -276,7 +276,7 @@ export default async function SubmissionReviewPage({
                       </tr>
                     </thead>
                     <tbody>
-                      {allSubmissions.map((s, index) => {
+                      {allSubmissions.map((s: typeof allSubmissions[number], index: number) => {
                         const num = allSubmissions.length - index;
                         const isCurrent = s.id === submission.id;
                         return (

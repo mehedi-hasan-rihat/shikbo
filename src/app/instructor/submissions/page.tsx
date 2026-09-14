@@ -157,7 +157,7 @@ export default async function InstructorSubmissionsPage({
                 </tr>
               </thead>
               <tbody>
-                {submissions.map((sub) => (
+                {submissions.map((sub: typeof submissions[number]) => (
                   <tr key={sub.id}>
                     <td>
                       <span

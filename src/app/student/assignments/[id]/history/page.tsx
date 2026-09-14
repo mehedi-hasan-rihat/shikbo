@@ -83,7 +83,7 @@ export default async function AssignmentHistoryPage({
         <div
           style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}
         >
-          {submissions.map((sub, index) => {
+          {submissions.map((sub: typeof submissions[number], index: number) => {
             const attemptNumber = submissions.length - index;
             const isLatest = index === 0;
 
