@@ -61,22 +61,22 @@ export default async function InstructorDashboardPage() {
       {/* ------------------------------------------------------------------ */}
       {totalActionCount > 0 && (
         <section style={{ marginBottom: "var(--space-6)" }}>
-          <h2
+          <p
             style={{
-              fontSize: "var(--font-sm)",
-              fontWeight: "var(--font-semibold)",
-              color: "var(--text-primary)",
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--font-xs)",
+              fontWeight: "var(--font-medium)",
+              color: "var(--text-muted)",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
               marginBottom: "var(--space-3)",
             }}
           >
-            Needs your attention
-          </h2>
+            Needs attention
+          </p>
           <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "var(--space-2)",
-            }}
+            className="card"
+            style={{ padding: 0, overflow: "hidden" }}
           >
             {/* Pending reviews */}
             {actions.pendingReviewCount > 0 && (
@@ -84,7 +84,7 @@ export default async function InstructorDashboardPage() {
                 href="/instructor/submissions?status=pending"
                 label={`${actions.pendingReviewCount} submission${actions.pendingReviewCount !== 1 ? "s" : ""} waiting for review`}
                 kind="pending"
-                cta="Review now"
+                cta="Review"
               />
             )}
 
@@ -94,7 +94,7 @@ export default async function InstructorDashboardPage() {
                 href="#students-needing-attention"
                 label={`${actions.atRiskStudentCount} student${actions.atRiskStudentCount !== 1 ? "s" : ""} ${actions.atRiskStudentCount !== 1 ? "have" : "has"} repeated needs improvement`}
                 kind="warning"
-                cta="View students"
+                cta="View"
               />
             )}
 
@@ -103,19 +103,19 @@ export default async function InstructorDashboardPage() {
               <ActionItem
                 key={a.assignmentId}
                 href={`/instructor/assignments/${a.assignmentId}`}
-                label={`"${a.title}" has a ${a.acceptanceRate}% acceptance rate`}
+                label={`"${a.title}" — ${a.acceptanceRate}% acceptance rate`}
                 kind="warning"
-                cta="View assignment"
+                cta="View"
               />
             ))}
 
-            {/* Assignments with deadlines this week */}
+            {/* Deadlines this week */}
             {actions.deadlinesThisWeek.length > 0 && (
               <ActionItem
                 href="/instructor/assignments"
-                label={`${actions.deadlinesThisWeek.length} assignment${actions.deadlinesThisWeek.length !== 1 ? "s have" : " has"} a deadline this week${actions.deadlinesThisWeek.reduce((n: number, a: typeof actions.deadlinesThisWeek[number]) => n + a.pendingCount, 0) > 0 ? ` · ${actions.deadlinesThisWeek.reduce((n: number, a: typeof actions.deadlinesThisWeek[number]) => n + a.pendingCount, 0)} submission${actions.deadlinesThisWeek.reduce((n: number, a: typeof actions.deadlinesThisWeek[number]) => n + a.pendingCount, 0) !== 1 ? "s" : ""} pending` : ""}`}
-                kind="info"
-                cta="View assignments"
+                label={`${actions.deadlinesThisWeek.length} assignment${actions.deadlinesThisWeek.length !== 1 ? "s" : ""} due this week${actions.deadlinesThisWeek.reduce((n: number, a: typeof actions.deadlinesThisWeek[number]) => n + a.pendingCount, 0) > 0 ? ` · ${actions.deadlinesThisWeek.reduce((n: number, a: typeof actions.deadlinesThisWeek[number]) => n + a.pendingCount, 0)} pending` : ""}`}
+                kind="deadline"
+                cta="View"
               />
             )}
           </div>
@@ -500,30 +500,18 @@ export default async function InstructorDashboardPage() {
 // Action item row
 // ---------------------------------------------------------------------------
 
-type ActionKind = "pending" | "warning" | "info";
+type ActionKind = "pending" | "warning" | "deadline";
 
-const kindStyles: Record<
-  ActionKind,
-  { border: string; bg: string; dot: string; textColor: string }
-> = {
-  pending: {
-    border: "var(--border)",
-    bg:     "var(--surface)",
-    dot:    "var(--status-pending)",
-    textColor: "var(--text-primary)",
-  },
-  warning: {
-    border: "var(--warning-border)",
-    bg:     "var(--warning-subtle)",
-    dot:    "var(--warning)",
-    textColor: "var(--warning-foreground)",
-  },
-  info: {
-    border: "var(--info-border)",
-    bg:     "var(--info-subtle)",
-    dot:    "var(--info)",
-    textColor: "var(--info-foreground)",
-  },
+const kindAccent: Record<ActionKind, string> = {
+  pending:  "var(--status-pending)",
+  warning:  "var(--status-needs-improvement)",
+  deadline: "var(--info)",
+};
+
+const kindTag: Record<ActionKind, string> = {
+  pending:  "Review",
+  warning:  "Performance",
+  deadline: "Deadline",
 };
 
 function ActionItem({
@@ -537,54 +525,56 @@ function ActionItem({
   kind: ActionKind;
   cta: string;
 }) {
-  const s = kindStyles[kind];
   return (
     <div
       style={{
         display: "flex",
-        alignItems: "flex-start",
+        alignItems: "center",
         justifyContent: "space-between",
-        gap: "var(--space-3)",
+        gap: "var(--space-4)",
         padding: "var(--space-3) var(--space-4)",
-        background: s.bg,
-        border: `1px solid ${s.border}`,
-        borderRadius: "var(--radius)",
-        flexWrap: "wrap",
+        borderBottom: "1px solid var(--border-subtle)",
+        borderLeft: `3px solid ${kindAccent[kind]}`,
+        background: "var(--panel)",
       }}
     >
-      <div
-        style={{ display: "flex", alignItems: "flex-start", gap: "var(--space-3)", flex: 1, minWidth: 0 }}
-      >
-        <span
-          style={{
-            width: 6,
-            height: 6,
-            borderRadius: "50%",
-            background: s.dot,
-            flexShrink: 0,
-            marginTop: 5,
-          }}
-        />
-        <span
-          style={{
-            fontSize: "var(--font-sm)",
-            color: s.textColor,
-            lineHeight: "var(--leading-normal)",
-          }}
-        >
+      <div style={{
+        display: "flex",
+        alignItems: "baseline",
+        gap: "var(--space-3)",
+        minWidth: 0,
+        flex: 1,
+      }}>
+        <span style={{
+          fontFamily: "var(--font-mono)",
+          fontSize: "var(--font-xs)",
+          color: "var(--text-muted)",
+          textTransform: "uppercase" as const,
+          letterSpacing: "0.06em",
+          flexShrink: 0,
+        }}>
+          {kindTag[kind]}
+        </span>
+        <span style={{
+          fontSize: "var(--font-sm)",
+          color: "var(--text-secondary)",
+          lineHeight: "var(--leading-normal)",
+        }}>
           {label}
         </span>
       </div>
       <Link
         href={href}
         style={{
-          fontSize: "var(--font-sm)",
+          fontFamily: "var(--font-mono)",
+          fontSize: "var(--font-xs)",
           fontWeight: "var(--font-medium)",
-          color: kind === "pending" ? "var(--brand)" : s.textColor,
+          color: "var(--text-muted)",
           whiteSpace: "nowrap",
           flexShrink: 0,
           textDecoration: "none",
-          opacity: 0.9,
+          textTransform: "uppercase" as const,
+          letterSpacing: "0.04em",
         }}
       >
         {cta} →
