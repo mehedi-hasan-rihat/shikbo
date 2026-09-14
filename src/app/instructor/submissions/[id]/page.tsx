@@ -115,14 +115,7 @@ export default async function SubmissionReviewPage({
       </div>
 
       {/* Content grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 320px",
-          gap: "var(--space-6)",
-          alignItems: "start",
-        }}
-      >
+      <div className="dash-grid-sidebar-right">
         {/* Left: submission content + review form */}
         <div
           style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)" }}

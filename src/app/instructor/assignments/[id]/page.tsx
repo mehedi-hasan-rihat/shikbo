@@ -119,14 +119,7 @@ export default async function AssignmentDetailPage({ params }: { params: Params 
       </div>
 
       {/* Details + stats grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 300px",
-          gap: "var(--space-6)",
-          alignItems: "start",
-        }}
-      >
+      <div className="dash-grid-sidebar-right">
         {/* Left: assignment info */}
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)" }}>
           {/* Description */}

@@ -37,7 +37,7 @@ export default async function InstructorDashboardPage() {
     ]);
 
   const hasData = overview.totalSubmissions > 0;
-  const now = Date.now();
+  const now = new Date().getTime();
 
   const totalActionCount =
     (actions.pendingReviewCount > 0 ? 1 : 0) +
@@ -122,17 +122,8 @@ export default async function InstructorDashboardPage() {
         </section>
       )}
 
-      {/* ------------------------------------------------------------------ */}
-      {/* KPI row — SHK-044                                                  */}
-      {/* ------------------------------------------------------------------ */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-          gap: "var(--space-4)",
-          marginBottom: "var(--space-6)",
-        }}
-      >
+      {/* KPI row — SHK-044 */}
+      <div className="kpi-grid" style={{ marginBottom: "var(--space-6)" }}>
         <KpiCard label="Active assignments" value={overview.totalAssignments} />
         <KpiCard label="Total submissions" value={overview.totalSubmissions} />
         <KpiCard
@@ -178,14 +169,8 @@ export default async function InstructorDashboardPage() {
       {/* Status chart + at-risk students                                    */}
       {/* ------------------------------------------------------------------ */}
       <div
-        className="grid-cols-responsive"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "320px 1fr",
-          gap: "var(--space-5)",
-          marginBottom: "var(--space-5)",
-          alignItems: "start",
-        }}
+        className="dash-grid-sidebar-left"
+        style={{ marginBottom: "var(--space-5)" }}
       >
         {/* Status donut */}
         <section className="card">
@@ -264,14 +249,8 @@ export default async function InstructorDashboardPage() {
       {/* Assignment breakdown + Deadlines this week                        */}
       {/* ------------------------------------------------------------------ */}
       <div
-        className="grid-cols-responsive"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 320px",
-          gap: "var(--space-5)",
-          marginBottom: "var(--space-5)",
-          alignItems: "start",
-        }}
+        className="dash-grid-sidebar-right"
+        style={{ marginBottom: "var(--space-5)" }}
       >
         <section className="card" style={{ padding: 0, overflow: "hidden" }}>
           <div style={{ padding: "var(--space-5) var(--space-5) var(--space-4)" }}>
@@ -563,17 +542,18 @@ function ActionItem({
     <div
       style={{
         display: "flex",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "space-between",
-        gap: "var(--space-4)",
+        gap: "var(--space-3)",
         padding: "var(--space-3) var(--space-4)",
         background: s.bg,
         border: `1px solid ${s.border}`,
-        borderRadius: "var(--radius-lg)",
+        borderRadius: "var(--radius)",
+        flexWrap: "wrap",
       }}
     >
       <div
-        style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", minWidth: 0 }}
+        style={{ display: "flex", alignItems: "flex-start", gap: "var(--space-3)", flex: 1, minWidth: 0 }}
       >
         <span
           style={{
@@ -582,15 +562,14 @@ function ActionItem({
             borderRadius: "50%",
             background: s.dot,
             flexShrink: 0,
+            marginTop: 5,
           }}
         />
         <span
           style={{
             fontSize: "var(--font-sm)",
             color: s.textColor,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            lineHeight: "var(--leading-normal)",
           }}
         >
           {label}
@@ -601,7 +580,7 @@ function ActionItem({
         style={{
           fontSize: "var(--font-sm)",
           fontWeight: "var(--font-medium)",
-          color: kind === "pending" ? "var(--primary)" : s.textColor,
+          color: kind === "pending" ? "var(--brand)" : s.textColor,
           whiteSpace: "nowrap",
           flexShrink: 0,
           textDecoration: "none",

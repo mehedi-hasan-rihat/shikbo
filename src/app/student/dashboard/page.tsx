@@ -40,14 +40,7 @@ export default async function StudentDashboardPage() {
       {/* ------------------------------------------------------------------ */}
       {/* KPI row — SHK-041                                                   */}
       {/* ------------------------------------------------------------------ */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
-          gap: "var(--space-4)",
-          marginBottom: "var(--space-6)",
-        }}
-      >
+      <div className="kpi-grid" style={{ marginBottom: "var(--space-6)" }}>
         <KpiCard
           label="Assignments"
           value={metrics.totalActiveAssignments}
@@ -81,14 +74,8 @@ export default async function StudentDashboardPage() {
       {/* Progress + Recent feedback — SHK-042                               */}
       {/* ------------------------------------------------------------------ */}
       <div
-        className="grid-cols-responsive"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 340px",
-          gap: "var(--space-5)",
-          marginBottom: "var(--space-5)",
-          alignItems: "start",
-        }}
+        className="dash-grid-sidebar-right-md"
+        style={{ marginBottom: "var(--space-5)" }}
       >
         {/* Progress visualization */}
         <section className="card">

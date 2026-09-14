@@ -591,6 +591,10 @@ Use directly in JSX. Do not rewrite equivalent styles.
 |-------|---------|
 | `.mobile-nav-wrapper` | Hidden on desktop; shown mobile |
 | `.grid-cols-responsive` | Collapses to 1-column below 768px |
+| `.dash-grid-sidebar-right` | `1fr 320px` desktop → `1fr 280px` tablet → `1fr` mobile |
+| `.dash-grid-sidebar-left` | `320px 1fr` desktop → `280px 1fr` tablet → `1fr` mobile |
+| `.dash-grid-sidebar-right-md` | `1fr 340px` desktop → `1fr 280px` tablet → `1fr` mobile |
+| `.kpi-grid` | `auto-fill minmax(160px)` desktop → `auto-fill minmax(140px)` tablet → `repeat(2,1fr)` mobile |
 
 ---
 

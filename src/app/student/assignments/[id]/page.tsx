@@ -81,14 +81,7 @@ export default async function StudentAssignmentDetailPage({
       </div>
 
       {/* Content grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 280px",
-          gap: "var(--space-6)",
-          alignItems: "start",
-        }}
-      >
+      <div className="dash-grid-sidebar-right">
         {/* Left: description + submission form */}
         <div
           style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)" }}
