@@ -5,7 +5,16 @@ export const metadata: Metadata = {
   title: "Create account — Shikbo",
 };
 
-export default function RegisterPage() {
+type SearchParams = Promise<{ role?: string }>;
+
+export default async function RegisterPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const { role } = await searchParams;
+  const defaultRole = role === "instructor" || role === "student" ? role : undefined;
+
   return (
     <main
       style={{
@@ -45,7 +54,7 @@ export default function RegisterPage() {
 
         {/* Card */}
         <div className="card">
-          <RegisterForm />
+          <RegisterForm defaultRole={defaultRole} />
         </div>
       </div>
     </main>

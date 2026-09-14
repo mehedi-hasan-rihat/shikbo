@@ -5,7 +5,11 @@ import Link from "next/link";
 import { register } from "@/server/actions/auth";
 import type { AuthState } from "@/server/actions/auth";
 
-export default function RegisterForm() {
+type Props = {
+  defaultRole?: "instructor" | "student";
+};
+
+export default function RegisterForm({ defaultRole }: Props) {
   const [state, action, pending] = useActionState<AuthState, FormData>(
     register,
     null
@@ -97,7 +101,7 @@ export default function RegisterForm() {
           id="role"
           name="role"
           className={`select${state?.errors?.role ? " input--error" : ""}`}
-          defaultValue=""
+          defaultValue={defaultRole ?? ""}
           aria-describedby={state?.errors?.role ? "role-error" : undefined}
           aria-invalid={state?.errors?.role ? "true" : undefined}
           required

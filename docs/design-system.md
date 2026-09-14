@@ -1,102 +1,84 @@
 # Shikbo — Design System
 
-A centralized token system and design guidelines for the Shikbo
-Assignment & Learning Analytics platform.
-
-Every visual decision in this product should answer one question:
+Every visual decision must answer one question:
 **"Does this improve information hierarchy or usability?"**
 If not, remove it.
 
 ---
 
-## Design Philosophy
+## Design Language
 
-The interface should feel like a serious internal tool used daily
-by instructors and students — not a marketing page or an AI demo.
+The interface is a serious internal tool — engineered, confident, and precise.
+It should feel like software built by people who care about craft,
+not a generic SaaS template or an AI-generated dashboard.
 
-Prioritize:
-1. Typography
-2. Spacing
-3. Alignment
-4. Information hierarchy
-5. Borders
-6. Consistent component geometry
-7. Subtle semantic state colors
+References in spirit (not to copy): Linear, Vercel dashboard, GitHub, Basecamp.
 
-References in spirit (not to copy): Linear, GitHub, Vercel dashboard,
-modern education admin software.
+**Do not use:**
+- Gradients or glassmorphism
+- Decorative shadows or floating-card aesthetics
+- Neon, saturated, or pastel fill colors
+- Large border radii (no `8px+` on structural components)
+- Oversized or pill-shaped buttons and cards
+- Decorative illustrations or large icon treatments
+- Excessive animation or spring/bounce effects
+- "AI product" visual clichés: glowing rings, purple-to-blue gradients, dark mode by default
+- Generic hero sections with blurred shapes
 
-### Do not use
-
-- Gradients
-- Glassmorphism
-- Excessive shadows
-- Neon or saturated colors
-- Large rounded cards
-- Excessive pill-shaped UI
-- Oversized or decorative typography
-- Decorative illustrations
-- Unnecessary icons
-- Excessive animation
-- Colorful backgrounds
-- "AI dashboard" or generic SaaS landing-page aesthetics
-
-The interface is primarily white and light gray with restrained semantic color.
+The base is a cool gray page surface with white raised panels.
+Brand color is deep charcoal — not blue.
 
 ---
 
 ## Color Tokens
 
-All colors must be consumed via CSS custom properties.
-Do not hardcode hex values inside components.
+All colors via CSS custom properties. No hardcoded hex values in components.
 
-### Background
+### Surfaces
 
 ```css
---background:        #FFFFFF;
---background-subtle: #FAFAFA;
---background-muted:  #F5F5F5;
---background-hover:  #F8F8F8;
---background-active: #F3F4F6;
+--page-surface:  #F4F4F5;   /* app/page background — cool gray */
+--panel:         #FFFFFF;   /* raised cards, modals, menus */
+--soft-panel:    #FAFAFA;   /* subtle fills inside framed columns */
 ```
 
-### Surface
+### Background (legacy aliases, map to surface tokens)
 
 ```css
---surface:        #FFFFFF;
---surface-subtle: #FCFCFC;
---surface-hover:  #FAFAFA;
+--background:        #F4F4F5;
+--background-subtle: #FAFAFA;
+--background-muted:  #F4F4F5;
+--background-hover:  #EFEFEF;
+--background-active: #E9E9EB;
 ```
 
 ### Border
 
 ```css
---border:        #E5E7EB;
---border-subtle: #ECECEC;
---border-strong: #D1D5DB;
+--border:        #E4E4E7;
+--border-subtle: #F2F2F2;
+--border-strong: #D4D4D8;
+```
+
+### Brand
+
+```css
+--brand:       #232323;   /* primary actions, key emphasis */
+--brand-hover: #18181B;
+--brand-fg:    #FFFFFF;
 ```
 
 ### Text
 
 ```css
---text-primary:   #111827;
---text-secondary: #4B5563;
---text-muted:     #6B7280;
---text-disabled:  #9CA3AF;
+--text-primary:   #18181B;   /* headings, high-contrast labels */
+--text-secondary: #52525B;   /* body, descriptions */
+--text-muted:     #71717A;   /* placeholders, supporting copy */
+--text-disabled:  #A1A1AA;
 --text-inverse:   #FFFFFF;
 ```
 
-### Primary
-
-```css
---primary:            #2563EB;
---primary-hover:      #1D4ED8;
---primary-active:     #1E40AF;
---primary-subtle:     #EFF6FF;
---primary-foreground: #FFFFFF;
-```
-
-### Success
+### Semantic — Success
 
 ```css
 --success:            #16A34A;
@@ -105,7 +87,7 @@ Do not hardcode hex values inside components.
 --success-foreground: #166534;
 ```
 
-### Warning
+### Semantic — Warning
 
 ```css
 --warning:            #D97706;
@@ -114,7 +96,7 @@ Do not hardcode hex values inside components.
 --warning-foreground: #92400E;
 ```
 
-### Danger
+### Semantic — Danger
 
 ```css
 --danger:            #DC2626;
@@ -123,7 +105,7 @@ Do not hardcode hex values inside components.
 --danger-foreground: #991B1B;
 ```
 
-### Info
+### Semantic — Info
 
 ```css
 --info:            #2563EB;
@@ -136,51 +118,56 @@ Do not hardcode hex values inside components.
 
 ## Semantic Tokens — Assignment Difficulty
 
-Difficulty is a semantic state, not a decorative label.
-Do not use bright or saturated colors.
+Difficulty is state, not decoration. Do not use saturated colors.
 
 ```css
---difficulty-beginner:          #16A34A;
---difficulty-beginner-bg:       #F0FDF4;
+--difficulty-beginner:        #16A34A;
+--difficulty-beginner-bg:     #F0FDF4;
 
---difficulty-intermediate:      #2563EB;
---difficulty-intermediate-bg:   #EFF6FF;
+--difficulty-intermediate:    #2563EB;
+--difficulty-intermediate-bg: #EFF6FF;
 
---difficulty-advanced:          #D97706;
---difficulty-advanced-bg:       #FFFBEB;
+--difficulty-advanced:        #D97706;
+--difficulty-advanced-bg:     #FFFBEB;
 ```
 
 ---
 
 ## Semantic Tokens — Submission Status
 
-Status colors communicate state, not decoration.
-
 ```css
---status-pending:                 #6B7280;
---status-pending-bg:              #F3F4F6;
+--status-pending:              #71717A;
+--status-pending-bg:           #F4F4F5;
 
---status-accepted:                #16A34A;
---status-accepted-bg:             #F0FDF4;
+--status-accepted:             #16A34A;
+--status-accepted-bg:          #F0FDF4;
 
---status-needs-improvement:       #D97706;
---status-needs-improvement-bg:    #FFFBEB;
+--status-needs-improvement:    #D97706;
+--status-needs-improvement-bg: #FFFBEB;
 ```
 
 ---
 
 ## Typography
 
-Font stack: `Inter, Geist, system-ui, sans-serif`
+Three font roles — never mix them up.
 
-Typography should be compact and professional.
-Body text is 14px. Avoid oversized headings.
-Dashboard page titles: 24–28px. Not hero-scale.
+| Role | Font | Usage |
+|------|------|-------|
+| UI | Inter | Body, labels, controls, nav |
+| Mono | Geist Mono | Table headers, badge text, KPI labels, eyebrows |
+| Display | EB Garamond | Page titles, dialog titles, editorial headings |
+
+```css
+--font-ui:      "Inter", ui-sans-serif, system-ui, sans-serif;
+--font-mono:    "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+--font-display: "EB Garamond", "Adobe Jenson Pro", Georgia, serif;
+```
 
 ### Size Tokens
 
 ```css
---font-xs:   12px;
+--font-xs:   11px;
 --font-sm:   13px;
 --font-base: 14px;
 --font-md:   15px;
@@ -199,22 +186,22 @@ Dashboard page titles: 24–28px. Not hero-scale.
 --font-bold:     700;
 ```
 
-Use `600` for important headings. Avoid excessive bold text throughout UI.
+### Rules
 
-### Line Height Tokens
-
-```css
---leading-tight:   1.2;
---leading-snug:    1.35;
---leading-normal:  1.5;
---leading-relaxed: 1.6;
-```
+- Body text: 14px Inter
+- Table headers: 11px Geist Mono, uppercase, `letter-spacing: 0.06em`
+- KPI labels: 11px Geist Mono, uppercase
+- Badge text: Geist Mono, uppercase
+- Sidebar section labels: Geist Mono, uppercase
+- Page titles: 24px EB Garamond, `letter-spacing: -0.02em`
+- Dialog titles: 16px EB Garamond
+- Minimum body copy: 16px in reading-context prose
 
 ---
 
 ## Spacing
 
-Base unit: 4px. All spacing must come from this scale.
+Base unit: 4px. All spacing from this scale only.
 
 ```css
 --space-1:  4px;
@@ -229,77 +216,73 @@ Base unit: 4px. All spacing must come from this scale.
 --space-16: 64px;
 ```
 
-Most UI spacing uses: `8px`, `12px`, `16px`, `20px`, `24px`, `32px`.
+Common UI spacing: `8px`, `12px`, `16px`, `20px`, `24px`, `32px`.
 Do not use arbitrary values.
 
 ---
 
 ## Border Radius
 
-Use restrained radius. Do not apply large radii everywhere.
+**4px everywhere. This is the system's visual signature.**
 
 ```css
---radius-sm: 4px;
---radius-md: 6px;   /* default for controls */
---radius-lg: 8px;   /* cards and panels */
---radius-xl: 10px;
+--radius:      4px;   /* all structural components */
+--radius-sm:   4px;
+--radius-md:   4px;
+--radius-lg:   4px;
+--radius-xl:   4px;
+--radius-full: 9999px;  /* toggles, avatars, radios, range thumbs only */
 ```
 
-- Default controls (buttons, inputs, badges): `6px`
-- Cards and panels: `8px`
-- Do not use `16px`, `20px`, or `24px` radius as defaults.
+Exceptions — full round (`9999px`) is only for:
+- Toggle switches
+- Avatar circles
+- Radio buttons
+- Range thumb handles
+
+Do not use `6px`, `8px`, `10px`, or higher on buttons, cards, badges, inputs, modals, tabs, or tables.
 
 ---
 
 ## Borders and Shadows
 
-Borders are more important than shadows in this product.
-Most containers rely on `background + border`, not `background + shadow`.
-
-### Default border
+Depth comes from **white panels on a gray page surface** plus `1px` borders.
+Shadows are for genuine elevation only — not decoration.
 
 ```css
+/* Default border */
 border: 1px solid var(--border);
-```
 
-### Shadow Tokens
-
-```css
+/* Shadow tokens */
 --shadow-none: none;
---shadow-sm:   0 1px 2px rgba(0, 0, 0, 0.04);
---shadow-md:   0 4px 12px rgba(0, 0, 0, 0.06);
+--shadow-sm:   0 1px 2px rgba(0, 0, 0, 0.05);
+--shadow-md:   0 4px 12px rgba(0, 0, 0, 0.08);
 ```
 
-Use shadows only when elevation is genuinely required (e.g., dropdowns, modals).
-Avoid floating-card aesthetics in dashboard layouts.
+Use `--shadow-md` only for dropdowns and modals. Never on cards.
 
 ---
 
 ## Layout
 
-### Desktop
+### Application Layout
 
 ```
-Sidebar:       220–240px (fixed)
-Main content:  fluid
-Max content width: ~1200–1400px
+Page surface:            var(--page-surface)  — #F4F4F5
+Sidebar:                 240px, white panel, right border
+Main content:            fluid, white panels on gray background
+Max content width:       1400px
 Page horizontal padding: 24–32px
 Page vertical padding:   28–32px
 ```
 
-Use a strict grid. Align page titles, cards, tables, charts, filters,
-and action buttons to the same content grid. Avoid random positioning.
-
 ### Responsive Breakpoints
 
-| Context       | Behavior                                     |
-|--------------|----------------------------------------------|
-| Desktop       | Sidebar + content side by side               |
-| Tablet        | Collapsible sidebar                          |
-| Mobile        | Sidebar becomes a drawer; cards 1-column;    |
-|               | charts 1-column; tables scroll horizontally  |
-
-Do not simply shrink the desktop layout on mobile.
+| Context | Behavior |
+|---------|---------|
+| ≥ 1025px (desktop) | Sidebar visible; `.mobile-nav-wrapper` hidden |
+| 769–1024px (tablet) | Sidebar narrows to 200px |
+| ≤ 768px (mobile) | Sidebar hidden; `.mobile-nav-wrapper` shown; `.content-area` padding reduced; `.page-header` stacks vertically |
 
 ---
 
@@ -307,172 +290,169 @@ Do not simply shrink the desktop layout on mobile.
 
 ### Sidebar
 
-- Background: white or near-white
-- Right border: `1px solid var(--border)`
-- Nav item height: 36–40px
-- Nav item padding: `8px 12px`
-- Nav item radius: `6px`
-- Default state: transparent background
-- Active state: very subtle neutral background (`var(--background-active)`)
-- Do not make the active item look like a large colorful button
-- Icons: small, secondary to text labels
+```
+background:     var(--panel)
+border-right:   1px solid var(--border)
+width:          240px
+nav item height: 36px
+nav item radius: 4px
+active state:   var(--background-active) — no colorful highlight
+section labels: Geist Mono, uppercase
+```
 
 ### Cards
 
-Cards are data containers, not marketing components.
+Cards are data containers. White panel raised on gray surface.
 
 ```
-background: var(--surface)
-border:     1px solid var(--border)
-radius:     var(--radius-lg)   /* 8px */
-padding:    16–20px
+background:  var(--panel)
+border:      1px solid var(--border)
+radius:      4px
+padding:     16–20px
+shadow:      none
 ```
 
-Avoid large padding, dramatic shadows, gradient headers, and oversized icons.
+No shadows. No hover glow. No gradient headers. No decorative icons.
 
 ### KPI / Metric Cards
 
-Compact structure:
-
 ```
-Label         (12–13px, muted)
-Value         (24–28px, semibold)
-Supporting    (12–13px, secondary)
+Label:     Geist Mono, 11px, uppercase, muted
+Value:     24px, semibold, letter-spacing: -0.02em
+Support:   13px, muted
 ```
-
-Example:
-```
-Total Submissions
-128
-+12 this week
-```
-
-Do not place giant decorative icons in KPI cards.
 
 ### Tables
 
-Tables are a primary UI surface in this product.
-
 ```
-border-collapse: separate
-header background: subtle muted or white
-header typography: 12–13px, medium, muted
-row height: minimum 52px
-row borders: subtle horizontal separators only
+header font:  Geist Mono, 11px, uppercase, letter-spacing: 0.06em
+header bg:    var(--soft-panel)
+row separator: 1px solid var(--border-subtle)
+row hover:    var(--background-hover)
 ```
 
-Avoid excessive vertical borders. Keep table actions compact.
+No vertical column borders. Actions compact.
 
 ### Buttons
 
-| Variant   | Style                              |
-|----------|------------------------------------|
-| Primary   | Solid primary background           |
-| Secondary | White background, border           |
-| Ghost     | Transparent background             |
-| Danger    | Semantic red                       |
+| Variant | Style |
+|---------|-------|
+| Primary | `var(--brand)` fill, white text |
+| Secondary | White panel, `var(--border-strong)` border |
+| Ghost | Transparent |
+| Danger | `var(--danger)` fill |
 
 ```
-Default height: 36px
-Compact height: 32px
-Large height:   40px
-Radius:         var(--radius-md)  /* 6px */
-Typography:     13–14px, medium
+Height:   36px default / 32px compact / 40px large
+Radius:   4px
+Font:     Inter, 13px, medium
 ```
 
-Avoid oversized CTA buttons.
-
-### Inputs
+### Inputs and Selects
 
 ```
-height:      36–40px
-border:      1px solid var(--border-strong)
-radius:      var(--radius-md)  /* 6px */
-focus:       subtle primary border/ring
-placeholder: var(--text-muted)
-label:       13px, medium
-help text:   12–13px, muted
+background:   var(--page-surface)  — gray fill at rest
+border:       1px solid var(--border)
+radius:       4px
+height:       36px
+focus bg:     var(--panel)         — white on focus
+focus border: var(--brand)
+focus ring:   0 0 0 3px rgba(35, 35, 35, 0.08)
 ```
-
-Forms should feel dense and professional.
 
 ### Badges
 
 ```
-height:     24–28px
-padding:    4px 8px
-typography: 12px, medium
-radius:     var(--radius-sm) or var(--radius-md)
+font:     Geist Mono, 11px, uppercase, letter-spacing: 0.04em
+radius:   4px
+height:   22px
+padding:  0 8px
 ```
 
-Use semantic background colors. Prefer slightly rounded rectangles over pill shapes.
+Use semantic fills. No pill shapes.
+
+### Tabs
+
+```
+tab bottom indicator: 2px solid var(--brand)
+inactive:             var(--text-muted)
+active:               var(--text-primary)
+```
+
+### Modals / Dialogs
+
+```
+background: var(--panel)
+border:     1px solid var(--border)
+radius:     4px
+shadow:     var(--shadow-md)
+backdrop:   rgba(0, 0, 0, 0.4)
+title font: EB Garamond
+```
 
 ---
 
 ## Charts
 
-Charts are analytical surfaces, not decorative elements.
+Charts are analytical surfaces, not decorations.
 
-- Background: white
-- Grid lines: very subtle (`var(--border-subtle)`)
-- Axis labels: `var(--text-muted)`
-- Tooltip: white surface, border, `var(--shadow-sm)`
-- Colors: use semantic palette tokens; avoid rainbow series
-- For multi-series charts: use a controlled semantic palette
+- Background: `var(--panel)`
+- Grid lines: `var(--border-subtle)`
+- Axis labels: `var(--text-muted)`, Geist Mono, uppercase
+- Tooltip: white panel, `1px solid var(--border)`, `var(--shadow-sm)`
+- Colors: semantic status/difficulty tokens; no rainbow series
+- Recharts `fill` props must use resolved hex values (SVG can't consume `var()`)
 
-Charts should prioritize readability, comparison, trends, and actionable insights.
+For `StatusDonutChart` and `StudentProgressChart`, use the exact hex values
+from the status tokens above, documented alongside the component.
 
 ---
 
 ## Animation
 
-Animation communicates state changes. It does not decorate the interface.
+State changes only. Not decoration.
 
 ```
-Duration:  150–200ms for normal UI transitions
+Duration:   150–200ms
+Easing:     ease
 Properties: opacity, background-color, border-color, transform
 ```
 
-Avoid:
-- Excessive bouncing or spring effects
-- Dramatic page transitions
-- Large-scale animations
-- Unnecessary motion
+No bouncing, spring effects, dramatic page transitions, or large-scale motion.
 
 ---
 
 ## Reusable Component Library
 
-All shared UI lives in `src/components/ui/`. **Always use these before writing custom markup.**
-If a component does not exist yet, add it here and document it in this file.
+All shared UI lives in `src/components/ui/`. Always use these before writing custom markup.
 
 | Component | File | Notes |
 |-----------|------|-------|
 | `Button` | `ui/Button.tsx` | Variants: `primary`, `secondary`, `ghost`, `danger`, `danger-ghost`. Sizes: `sm`, `default`, `lg`. Accepts `loading` prop. |
-| `Input` | `ui/Input.tsx` | Wraps a `<input>` with label, hint, and error wired via ARIA. |
+| `Input` | `ui/Input.tsx` | Wraps `<input>` with label, hint, and error wired via ARIA. |
 | `Textarea` | `ui/Textarea.tsx` | Same field pattern as Input. |
 | `Select` | `ui/Select.tsx` | Typed `options` array, optional placeholder. |
 | `Card` / `KpiCard` | `ui/Card.tsx` | `Card` variants: `default`, `sm`, `kpi`. Use `KpiCard` for metric surfaces. |
-| `Badge` / `DifficultyBadge` / `StatusBadge` | `ui/Badge.tsx` | Domain-aware wrappers over the base `Badge`. Use `DifficultyBadge` and `StatusBadge` instead of raw badges for domain values. |
+| `Badge` / `DifficultyBadge` / `StatusBadge` | `ui/Badge.tsx` | Domain-aware wrappers. Use `DifficultyBadge` and `StatusBadge` for domain values. |
 | `Dialog` | `ui/Dialog.tsx` | Accessible modal. Props: `open`, `onClose`, `title`, `description`, `size`, `footer`. Sizes: `sm`, `default`, `lg`, `xl`. |
-| `Tabs` | `ui/Tabs.tsx` | Keyboard-navigable tab set. Pass a `tabs` array with `id`, `label`, `content`. |
-| `Dropdown` | `ui/Dropdown.tsx` | Positioned menu. Pass `trigger`, `groups` (with items), and `align`. |
-| `EmptyState` | `ui/EmptyState.tsx` | Empty list/page state. Props: `title`, `description`, `action`. |
-| `LoadingState` | `ui/LoadingState.tsx` | Skeleton rows. Variants: `list` (default) — stacked table rows; `page` — header + block skeletons; `kpi` — header + KPI card grid + block skeletons (for dashboard routes). All variants include `role="status"` and a `.sr-only` "Loading…" announcement. |
-| `ErrorState` | `ui/ErrorState.tsx` | Error surface with `role="alert"`. Props: `title`, `message`, `action`. |
+| `Tabs` | `ui/Tabs.tsx` | Keyboard-navigable tab set. Pass `tabs` array with `id`, `label`, `content`. |
+| `Dropdown` | `ui/Dropdown.tsx` | Positioned menu. Props: `trigger`, `groups`, `align`. |
+| `EmptyState` | `ui/EmptyState.tsx` | Props: `title`, `description`, `action`. |
+| `LoadingState` | `ui/LoadingState.tsx` | Skeleton variants: `list`, `page`, `kpi`. All include `role="status"` and `.sr-only` announcement. |
+| `ErrorState` | `ui/ErrorState.tsx` | `role="alert"`. Props: `title`, `message`, `action`. |
 
 Assignment-specific components live in `src/components/assignments/`:
 
 | Component | File | Notes |
 |-----------|------|-------|
-| `AssignmentForm` | `assignments/AssignmentForm.tsx` | Create/edit assignment form. Props: `action`, `defaultValues`, `submitLabel`. Instructor flows only. |
-| `SubmissionForm` | `assignments/SubmissionForm.tsx` | Student submission form. Fields: URL (required), note (optional). Props: `action`, `defaultUrl`, `defaultNote`, `submitLabel`, `onCancel`. Client component using `useActionState`. |
-| `ReviewForm` | `submissions/ReviewForm.tsx` | Instructor review form. Fields: status (select), feedback (textarea). Props: `action`, `defaultStatus`, `defaultFeedback`, `aiContext` (optional — passes assignment/submission context to `FeedbackAssistant`). Client component using `useActionState`. |
-| `StatusDonutChart` | `analytics/StatusDonutChart.tsx` | Recharts donut chart for submission status distribution. Props: `data: StatusDistribution`. Client component. Shows "No submissions yet" empty state. |
-| `AssignmentImprovePanel` | `assignments/AssignmentImprovePanel.tsx` | "Improve with AI" button + AI draft preview. Reads current form values via `getFormValues()` callback, shows structured result, calls `onApply(result)` when instructor applies. Inline component — used inside `AssignmentForm`. |
-| `FeedbackAssistant` | `submissions/FeedbackAssistant.tsx` | Collapsible AI feedback assistant panel. Instructor enters observations, generates draft, reviews improvement suggestions, applies to the feedback textarea via `onApply(feedback)` callback. Used inside `ReviewForm`. |
-| `AtRiskStudentsTable` | `analytics/AtRiskStudentsTable.tsx` | Table of students with ≥2 latest submissions at needs_improvement. Shows name, email, count, total submissions, last active. Client component. |
-| `StudentProgressChart` | `analytics/StudentProgressChart.tsx` | Student-facing progress visualization. Stacked horizontal bar + horizontal bar chart (Recharts). Shows accepted / needs improvement / pending / not started distribution across all active assignments. Props: `data: StudentProgressDistribution`. Client component. |
+| `AssignmentForm` | `assignments/AssignmentForm.tsx` | Create/edit form. Props: `action`, `defaultValues`, `submitLabel`. Instructor only. |
+| `SubmissionForm` | `assignments/SubmissionForm.tsx` | Student submission form. Fields: URL (required), note (optional). Client component, `useActionState`. |
+| `ReviewForm` | `submissions/ReviewForm.tsx` | Instructor review. Fields: status, feedback. Optional `aiContext` prop. Client component, `useActionState`. |
+| `StatusDonutChart` | `analytics/StatusDonutChart.tsx` | Recharts donut chart. Props: `data: StatusDistribution`. Hex fill values: accepted `#16a34a`, pending `#71717a`, needs_improvement `#d97706`. |
+| `AssignmentImprovePanel` | `assignments/AssignmentImprovePanel.tsx` | "Improve with AI" inline panel. `getFormValues()` callback + `onApply(result)`. Used inside `AssignmentForm`. |
+| `FeedbackAssistant` | `submissions/FeedbackAssistant.tsx` | Collapsible AI feedback assistant. `onApply(feedback)` callback. Used inside `ReviewForm`. |
+| `AtRiskStudentsTable` | `analytics/AtRiskStudentsTable.tsx` | Students with ≥2 needs_improvement submissions. Client component. |
+| `StudentProgressChart` | `analytics/StudentProgressChart.tsx` | Stacked bar + horizontal bar (Recharts). Props: `data: StudentProgressDistribution`. Client component. |
 
 Layout components live in `src/components/layout/`:
 
@@ -480,65 +460,65 @@ Layout components live in `src/components/layout/`:
 |-----------|------|-------|
 | `AppSidebar` | `layout/AppSidebar.tsx` | Server component. Composes desktop sidebar + mobile drawer. |
 | `SidebarNav` | `layout/SidebarNav.tsx` | Client component. Active link via `usePathname`. |
-| `UserMenu` | `layout/UserMenu.tsx` | Client dropdown in sidebar footer. Shows initials avatar + role. |
+| `UserMenu` | `layout/UserMenu.tsx` | Client dropdown in sidebar footer. Initials avatar + role. |
 | `MobileSidebar` | `layout/MobileSidebar.tsx` | Client slide-in drawer. Auto-closes on route change. |
 
 ---
 
 ## CSS Component Classes
 
-These utility classes are defined in `src/app/globals.css` under `@layer components`.
-Use them directly in JSX instead of rewriting the same styles.
+Defined in `src/app/globals.css` under `@layer components`.
+Use directly in JSX. Do not rewrite equivalent styles.
 
 ### Layout
 
 | Class | Purpose |
 |-------|---------|
-| `.app-shell` | Root flex wrapper for sidebar + content layouts |
-| `.content-area` | Main content region beside the sidebar |
+| `.app-shell` | Root flex wrapper for sidebar + content |
+| `.content-area` | Main content region beside sidebar |
 | `.page-container` | Standalone page wrapper (max-width + padding) |
 
-### Page structure
+### Page Structure
 
 | Class | Purpose |
 |-------|---------|
-| `.page-header` | Flex row: title block left, actions right |
-| `.page-title` | `24px`, semibold, primary text |
-| `.page-subtitle` | `14px`, muted |
+| `.page-header` | Flex row: title left, actions right |
+| `.page-title` | 24px EB Garamond, semibold, `letter-spacing: -0.02em` |
+| `.page-subtitle` | 14px Inter, muted |
 
 ### Cards
 
 | Class | Purpose |
 |-------|---------|
-| `.card` | Standard card — `surface` bg, border, `8px` radius, `20px` padding |
-| `.card-sm` | Compact card — `16px` padding |
-| `.card-kpi` | KPI/metric card with flex column layout |
-| `.card-kpi__label` | `13px`, muted |
-| `.card-kpi__value` | `24px`, semibold |
-| `.card-kpi__support` | `13px`, secondary |
+| `.card` | Standard card — white panel, `1px border`, `4px` radius, `20px` padding |
+| `.card-sm` | Compact — `16px` padding |
+| `.card-kpi` | KPI/metric card, flex column |
+| `.card-kpi__label` | 11px Geist Mono, uppercase, muted |
+| `.card-kpi__value` | 24px, semibold, `letter-spacing: -0.02em` |
+| `.card-kpi__support` | 13px, muted |
 
 ### Forms
 
 | Class | Purpose |
 |-------|---------|
 | `.field` | Wraps label + input + hint/error |
-| `.field-label` | `13px`, medium |
-| `.field-hint` | `12px`, muted |
-| `.field-error` | `12px`, danger — add `role="alert"` |
-| `.input` | Base text input |
-| `.input--error` | Error state border/ring |
-| `.textarea` | Textarea — inherits `.input` focus styles |
+| `.field-label` | 13px Inter, medium |
+| `.field-hint` | 11px, muted |
+| `.field-error` | 11px, danger — add `role="alert"` |
+| `.input` | Base text input — gray fill at rest, white on focus |
+| `.input--error` | Error state border |
+| `.textarea` | Textarea — same focus behavior as `.input` |
 | `.select` | Styled `<select>` with chevron |
 
 ### Buttons
 
 | Class | Purpose |
 |-------|---------|
-| `.btn` | Base button — all variants extend this |
-| `.btn-primary` | Solid primary |
-| `.btn-secondary` | White + border |
+| `.btn` | Base — all variants extend this |
+| `.btn-primary` | Deep charcoal fill |
+| `.btn-secondary` | White panel + border |
 | `.btn-ghost` | Transparent |
-| `.btn-danger` | Solid red |
+| `.btn-danger` | Red fill |
 | `.btn-danger-ghost` | Text-only red |
 | `.btn-sm` | 32px height |
 | `.btn-lg` | 40px height |
@@ -547,9 +527,9 @@ Use them directly in JSX instead of rewriting the same styles.
 
 | Class | Purpose |
 |-------|---------|
-| `.badge` | Base badge |
+| `.badge` | Base — Geist Mono, uppercase, 4px radius |
 | `.badge-beginner` / `.badge-intermediate` / `.badge-advanced` | Difficulty |
-| `.badge-pending` / `.badge-accepted` / `.badge-needs-improvement` | Submission status |
+| `.badge-pending` / `.badge-accepted` / `.badge-needs-improvement` | Status |
 | `.badge-neutral` | Generic neutral |
 
 ### Tables
@@ -557,124 +537,117 @@ Use them directly in JSX instead of rewriting the same styles.
 | Class | Purpose |
 |-------|---------|
 | `.table-wrapper` | Horizontal scroll container |
-| `.table` | Full-width table with token-based styles |
+| `.table` | Full-width table — Geist Mono uppercase headers |
 
 ### Sidebar
 
 | Class | Purpose |
 |-------|---------|
-| `.sidebar` | Fixed 240px sidebar — hidden on mobile via CSS |
+| `.sidebar` | Fixed 240px panel — hidden mobile |
 | `.sidebar-nav` | Flex column of nav items |
-| `.sidebar-nav-item` | Single nav link/button — add `.active` or `aria-current="page"` |
-| `.sidebar-section-label` | `12px` uppercase section heading |
+| `.sidebar-nav-item` | Nav link/button — add `.active` or `aria-current="page"` |
+| `.sidebar-section-label` | 11px Geist Mono, uppercase eyebrow |
 
-### State surfaces
+### State Surfaces
 
 | Class | Purpose |
 |-------|---------|
-| `.callout` | Base inline callout block |
+| `.callout` | Base inline callout |
 | `.callout-success` / `.callout-warning` / `.callout-danger` / `.callout-info` | Semantic variants |
 | `.empty-state` | Centered empty state container |
-| `.empty-state__title` | `14px`, medium |
-| `.empty-state__description` | `13px`, muted, max 320px |
-| `.skeleton` | Pulsing loading placeholder |
-| `.sr-only` | Screen-reader-only (visually hidden) |
-| `.skip-link` | Skip-to-content anchor — visually hidden until `:focus-visible`, then slides in as a primary-colored pill. Place once in the root layout linking to `#main-content`. |
+| `.empty-state__title` | 14px, medium |
+| `.empty-state__description` | 13px, muted, max 320px |
+| `.skeleton` | Pulsing placeholder |
+| `.sr-only` | Visually hidden, screen-reader accessible |
+| `.skip-link` | Skip-to-content — hidden until `:focus-visible` |
 
 ### Overlays
 
 | Class | Purpose |
 |-------|---------|
 | `.dialog-backdrop` | Fixed full-screen backdrop |
-| `.dialog` | Modal container — default max 480px |
+| `.dialog` | Modal — default max 480px, 4px radius |
 | `.dialog-sm` / `.dialog-lg` / `.dialog-xl` | Size variants |
 | `.dialog-header` / `.dialog-body` / `.dialog-footer` | Dialog sections |
-| `.dialog-title` / `.dialog-description` | Dialog typography |
-| `.dropdown-menu` | Positioned dropdown surface |
+| `.dialog-title` | EB Garamond title |
+| `.dialog-description` | 13px, muted |
+| `.dropdown-menu` | Positioned menu surface |
 | `.dropdown-item` | Menu item |
-| `.dropdown-item-danger` | Danger-tinted menu item |
+| `.dropdown-item-danger` | Danger-tinted item |
 | `.dropdown-separator` | Horizontal rule between groups |
 
 ### Tabs
 
 | Class | Purpose |
 |-------|---------|
-| `.tabs` | Tabs wrapper |
-| `.tabs-list` | Tab button row (border-bottom) |
-| `.tabs-trigger` | Single tab button — add `.active` or `aria-selected="true"` |
-| `.tabs-panel` | Tab content panel |
+| `.tabs` | Wrapper |
+| `.tabs-list` | Tab button row — border-bottom |
+| `.tabs-trigger` | Tab button — add `.active` or `aria-selected="true"` |
+| `.tabs-panel` | Tab content |
 
-### Responsive utilities
+### Responsive Utilities
 
 | Class | Behavior |
 |-------|---------|
-| `.mobile-nav-wrapper` | Hidden on desktop; shows mobile top bar + drawer |
-| `.grid-cols-responsive` | Collapses to 1 column below 768px |
-
----
-
-## Responsive Breakpoints
-
-| Breakpoint | Behavior |
-|-----------|---------|
-| ≥ 1025px (desktop) | Sidebar visible; `.mobile-nav-wrapper` hidden |
-| 769–1024px (tablet) | Sidebar narrows to 200px |
-| ≤ 768px (mobile) | Sidebar hidden; `.mobile-nav-wrapper` shown; `.content-area` padding reduced; `.page-header` stacks vertically |
+| `.mobile-nav-wrapper` | Hidden on desktop; shown mobile |
+| `.grid-cols-responsive` | Collapses to 1-column below 768px |
 
 ---
 
 ## Implementation Rules
 
-1. All color, spacing, typography, radius, and shadow values must
-   come from the token definitions above.
-2. Do not hardcode hex values, pixel values, or arbitrary numbers
-   inside individual components when a token exists.
-3. Tokens are defined as CSS custom properties on `:root`.
-4. Tailwind config maps to these tokens so utility classes consume the same semantic values.
-5. **Use existing components from `src/components/ui/` before writing custom markup.**
-   Adding a new pattern? Add the component to `src/components/ui/`, then document it here.
-6. **Adding or changing a CSS class in `globals.css`? Update the class table in this file.**
-7. When adding a new component, verify it passes the design rule:
-   **every visual decision must improve information hierarchy or usability.**
+1. All color, spacing, typography, radius, and shadow values come from tokens.
+2. Do not hardcode hex values, pixel values, or arbitrary numbers in components.
+3. Tokens are CSS custom properties on `:root`. Tailwind maps to them.
+4. Use components from `src/components/ui/` before writing custom markup.
+5. Adding a component to `src/components/ui/`? Document it in this file.
+6. Adding a CSS class to `globals.css`? Add it to the class tables above.
+7. Recharts SVG `fill` props cannot consume `var()` — document the resolved hex values alongside the chart component.
 
 ---
 
 ## CSS Custom Properties — Full Reference
 
-Paste this block into your global stylesheet root:
-
 ```css
 :root {
-  /* Background */
-  --background:        #FFFFFF;
-  --background-subtle: #FAFAFA;
-  --background-muted:  #F5F5F5;
-  --background-hover:  #F8F8F8;
-  --background-active: #F3F4F6;
+  /* Surfaces */
+  --page-surface:  #F4F4F5;
+  --panel:         #FFFFFF;
+  --soft-panel:    #FAFAFA;
 
-  /* Surface */
-  --surface:        #FFFFFF;
-  --surface-subtle: #FCFCFC;
-  --surface-hover:  #FAFAFA;
+  /* Background (legacy aliases) */
+  --background:        #F4F4F5;
+  --background-subtle: #FAFAFA;
+  --background-muted:  #F4F4F5;
+  --background-hover:  #EFEFEF;
+  --background-active: #E9E9EB;
+  --surface:           #FFFFFF;
+  --surface-subtle:    #FAFAFA;
+  --surface-hover:     #F4F4F5;
 
   /* Border */
-  --border:        #E5E7EB;
-  --border-subtle: #ECECEC;
-  --border-strong: #D1D5DB;
+  --border:        #E4E4E7;
+  --border-subtle: #F2F2F2;
+  --border-strong: #D4D4D8;
+
+  /* Brand */
+  --brand:       #232323;
+  --brand-hover: #18181B;
+  --brand-fg:    #FFFFFF;
+
+  /* Primary (legacy aliases) */
+  --primary:            #232323;
+  --primary-hover:      #18181B;
+  --primary-active:     #09090B;
+  --primary-subtle:     #F4F4F5;
+  --primary-foreground: #FFFFFF;
 
   /* Text */
-  --text-primary:   #111827;
-  --text-secondary: #4B5563;
-  --text-muted:     #6B7280;
-  --text-disabled:  #9CA3AF;
+  --text-primary:   #18181B;
+  --text-secondary: #52525B;
+  --text-muted:     #71717A;
+  --text-disabled:  #A1A1AA;
   --text-inverse:   #FFFFFF;
-
-  /* Primary */
-  --primary:            #2563EB;
-  --primary-hover:      #1D4ED8;
-  --primary-active:     #1E40AF;
-  --primary-subtle:     #EFF6FF;
-  --primary-foreground: #FFFFFF;
 
   /* Success */
   --success:            #16A34A;
@@ -709,15 +682,20 @@ Paste this block into your global stylesheet root:
   --difficulty-advanced-bg:     #FFFBEB;
 
   /* Status */
-  --status-pending:              #6B7280;
-  --status-pending-bg:           #F3F4F6;
+  --status-pending:              #71717A;
+  --status-pending-bg:           #F4F4F5;
   --status-accepted:             #16A34A;
   --status-accepted-bg:          #F0FDF4;
   --status-needs-improvement:    #D97706;
   --status-needs-improvement-bg: #FFFBEB;
 
   /* Typography */
-  --font-xs:   12px;
+  --font-ui:      "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "EB Garamond", "Adobe Jenson Pro", Georgia, serif;
+  --font-sans:    "Inter", "Geist", ui-sans-serif, system-ui, sans-serif;
+
+  --font-xs:   11px;
   --font-sm:   13px;
   --font-base: 14px;
   --font-md:   15px;
@@ -748,15 +726,17 @@ Paste this block into your global stylesheet root:
   --space-12: 48px;
   --space-16: 64px;
 
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 10px;
+  /* Border Radius — 4px everywhere */
+  --radius:      4px;
+  --radius-sm:   4px;
+  --radius-md:   4px;
+  --radius-lg:   4px;
+  --radius-xl:   4px;
+  --radius-full: 9999px;
 
   /* Shadows */
   --shadow-none: none;
-  --shadow-sm:   0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md:   0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-sm:   0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md:   0 4px 12px rgba(0, 0, 0, 0.08);
 }
 ```

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import LoginForm from "@/components/auth/LoginForm";
+import QuickLogin from "@/components/auth/QuickLogin";
 
 export const metadata: Metadata = {
   title: "Sign in — Shikbo",
@@ -44,8 +45,9 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="card">
+        <div className="card" style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)" }}>
           <LoginForm />
+          <QuickLogin />
         </div>
       </div>
     </main>
