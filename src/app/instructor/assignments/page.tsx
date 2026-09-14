@@ -72,7 +72,7 @@ export default async function InstructorAssignmentsPage() {
 
                   return (
                     <tr key={a.id}>
-                      <td>
+                      <td data-label="Title">
                         <Link
                           href={`/instructor/assignments/${a.id}`}
                           style={{
@@ -83,10 +83,10 @@ export default async function InstructorAssignmentsPage() {
                           {a.title}
                         </Link>
                       </td>
-                      <td>
+                      <td data-label="Difficulty">
                         <DifficultyBadge difficulty={a.difficulty} />
                       </td>
-                      <td>
+                      <td data-label="Deadline">
                         <span
                           style={{
                             color: isPast
@@ -100,7 +100,7 @@ export default async function InstructorAssignmentsPage() {
                           {formatDeadline(a.deadline)}
                         </span>
                       </td>
-                      <td>
+                      <td data-label="Submissions">
                         <span
                           style={{
                             fontSize: "var(--font-sm)",
@@ -110,7 +110,7 @@ export default async function InstructorAssignmentsPage() {
                           {a._count.submissions}
                         </span>
                       </td>
-                      <td>
+                      <td data-label="Status">
                         <span
                           style={{
                             fontSize: "var(--font-xs)",
@@ -126,12 +126,14 @@ export default async function InstructorAssignmentsPage() {
                       <td>
                         <Link
                           href={`/instructor/assignments/${a.id}`}
-                          style={{
-                            fontSize: "var(--font-sm)",
-                            color: "var(--primary)",
-                          }}
+                          className={
+                            a._count.submissions > 0 && !isPast
+                              ? "btn btn-primary btn-sm"
+                              : "btn btn-ghost btn-sm"
+                          }
+                          style={{ whiteSpace: "nowrap" }}
                         >
-                          View
+                          {a._count.submissions > 0 && !isPast ? "Review →" : "View"}
                         </Link>
                       </td>
                     </tr>

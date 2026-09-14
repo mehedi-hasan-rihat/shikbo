@@ -187,7 +187,7 @@ export default async function AssignmentDetailPage({ params }: { params: Params 
                         ).length;
                         return (
                           <tr key={sub.id}>
-                            <td>
+                            <td data-label="Student">
                               <span
                                 style={{
                                   fontWeight: "var(--font-medium)",
@@ -206,10 +206,10 @@ export default async function AssignmentDetailPage({ params }: { params: Params 
                                 {sub.student.email}
                               </span>
                             </td>
-                            <td>
+                            <td data-label="Status">
                               <StatusBadge status={sub.status} />
                             </td>
-                            <td>
+                            <td data-label="Submitted">
                               <span
                                 style={{
                                   fontSize: "var(--font-sm)",
@@ -219,7 +219,7 @@ export default async function AssignmentDetailPage({ params }: { params: Params 
                                 {formatDate(sub.submittedAt)}
                               </span>
                             </td>
-                            <td>
+                            <td data-label="Attempts">
                               <span
                                 style={{
                                   fontSize: "var(--font-sm)",

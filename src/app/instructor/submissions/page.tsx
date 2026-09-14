@@ -74,14 +74,7 @@ export default async function InstructorSubmissionsPage({
       </div>
 
       {/* Status filter tabs */}
-      <div
-        style={{
-          display: "flex",
-          gap: "var(--space-1)",
-          marginBottom: "var(--space-5)",
-          borderBottom: "1px solid var(--border)",
-        }}
-      >
+      <div className="tabs-list-scroll" style={{ marginBottom: "var(--space-5)", gap: "var(--space-1)" }}>
         {STATUS_FILTERS.map((filter) => {
           const isActive = filter.value === activeFilter;
           const count = countMap[filter.value] ?? 0;
@@ -159,7 +152,7 @@ export default async function InstructorSubmissionsPage({
               <tbody>
                 {submissions.map((sub: typeof submissions[number]) => (
                   <tr key={sub.id}>
-                    <td>
+                    <td data-label="Student">
                       <span
                         style={{
                           fontWeight: "var(--font-medium)",
@@ -178,7 +171,7 @@ export default async function InstructorSubmissionsPage({
                         {sub.student.email}
                       </span>
                     </td>
-                    <td>
+                    <td data-label="Assignment">
                       <Link
                         href={`/instructor/assignments/${sub.assignment.id}`}
                         style={{
@@ -189,10 +182,10 @@ export default async function InstructorSubmissionsPage({
                         {sub.assignment.title}
                       </Link>
                     </td>
-                    <td>
+                    <td data-label="Difficulty">
                       <DifficultyBadge difficulty={sub.assignment.difficulty} />
                     </td>
-                    <td>
+                    <td data-label="Submitted">
                       <span
                         style={{
                           fontSize: "var(--font-sm)",
@@ -202,19 +195,20 @@ export default async function InstructorSubmissionsPage({
                         {formatDate(sub.submittedAt)}
                       </span>
                     </td>
-                    <td>
+                    <td data-label="Status">
                       <StatusBadge status={sub.status} />
                     </td>
                     <td>
                       <Link
                         href={`/instructor/submissions/${sub.id}`}
-                        style={{
-                          fontSize: "var(--font-sm)",
-                          color: "var(--primary)",
-                          whiteSpace: "nowrap",
-                        }}
+                        className={
+                          sub.status === "pending"
+                            ? "btn btn-primary btn-sm"
+                            : "btn btn-secondary btn-sm"
+                        }
+                        style={{ whiteSpace: "nowrap" }}
                       >
-                        Review
+                        {sub.status === "pending" ? "Review →" : "View"}
                       </Link>
                     </td>
                   </tr>

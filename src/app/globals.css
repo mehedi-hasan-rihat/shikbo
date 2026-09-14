@@ -324,6 +324,32 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Anchor elements used as buttons — prevent link color/underline overrides */
+a.btn,
+a.btn:hover {
+  text-decoration: none;
+}
+a.btn-primary,
+a.btn-primary:hover,
+a.btn-primary:active {
+  color: var(--brand-fg);
+}
+a.btn-secondary,
+a.btn-secondary:hover,
+a.btn-secondary:active {
+  color: var(--text-primary);
+}
+a.btn-ghost,
+a.btn-ghost:hover,
+a.btn-ghost:active {
+  color: var(--text-secondary);
+}
+a.btn-danger,
+a.btn-danger:hover,
+a.btn-danger:active {
+  color: #ffffff;
+}
+
 /* Focus ring — brand charcoal */
 :focus-visible {
   outline: 2px solid var(--brand);
@@ -760,6 +786,78 @@ a:hover {
   }
 
   /* ----------------------------------------------------------
+     TABLE — Mobile card view
+     On ≤ 768px each row becomes a card; each cell shows its
+     column label (set data-label="Column Name" on every <td>).
+     ---------------------------------------------------------- */
+  @media (max-width: 768px) {
+    .table-wrapper {
+      overflow-x: visible;
+    }
+
+    /* Hide the header row — labels come from data-label */
+    .table thead {
+      display: none;
+    }
+
+    .table,
+    .table tbody {
+      display: block;
+      width: 100%;
+    }
+
+    /* Each row becomes a card */
+    .table tbody tr {
+      display: block;
+      background-color: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-3);
+      padding: var(--space-1) 0;
+    }
+
+    .table tbody tr:hover {
+      background-color: var(--panel);
+    }
+
+    /* Each cell becomes a labeled row inside the card */
+    .table tbody tr td {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      padding: var(--space-2) var(--space-4);
+      border-bottom: 1px solid var(--border-subtle);
+      max-width: none;
+      overflow: visible;
+      white-space: normal;
+      text-overflow: unset;
+      word-break: break-word;
+    }
+
+    .table tbody tr td:last-child {
+      border-bottom: none;
+    }
+
+    /* Label pulled from data-label="…" on each <td> */
+    .table tbody tr td::before {
+      content: attr(data-label);
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-size: var(--font-xs);
+      font-weight: var(--font-medium);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* Last row in body — no margin after last card */
+    .table tbody tr:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  /* ----------------------------------------------------------
      SIDEBAR
      ---------------------------------------------------------- */
 
@@ -1103,6 +1201,20 @@ a:hover {
     display: flex;
     gap: 0;
     border-bottom: 1px solid var(--border);
+  }
+
+  /* Horizontally scrollable tab row — hides scrollbar cross-browser */
+  .tabs-list-scroll {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .tabs-list-scroll::-webkit-scrollbar {
+    display: none;
   }
 
   .tabs-trigger {

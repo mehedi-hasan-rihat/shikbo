@@ -52,7 +52,7 @@ export function AtRiskStudentsTable({ students }: AtRiskStudentsTableProps) {
         <tbody>
           {students.map((s) => (
             <tr key={s.studentId}>
-              <td>
+              <td data-label="Student">
                 <span
                   style={{
                     fontWeight: "var(--font-medium)",
@@ -71,7 +71,7 @@ export function AtRiskStudentsTable({ students }: AtRiskStudentsTableProps) {
                   {s.email}
                 </span>
               </td>
-              <td>
+              <td data-label="Needs Improvement">
                 {/* Visual urgency indicator */}
                 <div
                   style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}
@@ -104,7 +104,7 @@ export function AtRiskStudentsTable({ students }: AtRiskStudentsTableProps) {
                   </span>
                 </div>
               </td>
-              <td>
+              <td data-label="Total submissions">
                 <span
                   style={{
                     fontSize: "var(--font-sm)",
@@ -114,7 +114,7 @@ export function AtRiskStudentsTable({ students }: AtRiskStudentsTableProps) {
                   {s.totalSubmissions}
                 </span>
               </td>
-              <td>
+              <td data-label="Last active">
                 <span
                   style={{
                     fontSize: "var(--font-sm)",

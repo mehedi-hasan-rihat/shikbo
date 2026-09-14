@@ -538,6 +538,15 @@ Use directly in JSX. Do not rewrite equivalent styles.
 |-------|---------|
 | `.table-wrapper` | Horizontal scroll container |
 | `.table` | Full-width table — Geist Mono uppercase headers |
+| `.td-truncate` | Truncate long text in a cell with ellipsis |
+| `.td-wrap` | Allow a cell to wrap normally |
+
+### Tabs
+
+| Class | Purpose |
+|-------|---------|
+| `.tabs-list` | Standard tab row with bottom border |
+| `.tabs-list-scroll` | Horizontally scrollable tab row — hides scrollbar cross-browser; use on mobile-friendly filter bars |
 
 ### Sidebar
 

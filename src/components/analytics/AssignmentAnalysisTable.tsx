@@ -94,7 +94,7 @@ export function AssignmentAnalysisTable({ rows }: AssignmentAnalysisTableProps) 
         <tbody>
           {sorted.map((row) => (
             <tr key={row.assignmentId}>
-              <td>
+              <td data-label="Assignment">
                 <Link
                   href={`/instructor/assignments/${row.assignmentId}`}
                   style={{
@@ -106,31 +106,31 @@ export function AssignmentAnalysisTable({ rows }: AssignmentAnalysisTableProps) 
                   {row.title}
                 </Link>
               </td>
-              <td>
+              <td data-label="Difficulty">
                 <DifficultyBadge difficulty={row.difficulty} />
               </td>
-              <td>
+              <td data-label="Students">
                 <MiniBar
                   value={row.uniqueStudents}
                   max={maxStudents}
                   color="var(--primary)"
                 />
               </td>
-              <td>
+              <td data-label="Needs Improvement">
                 <MiniBar
                   value={row.needsImprovementCount}
                   max={row.uniqueStudents || 1}
                   color="#d97706"
                 />
               </td>
-              <td>
+              <td data-label="Accepted">
                 <MiniBar
                   value={row.acceptedCount}
                   max={row.uniqueStudents || 1}
                   color="#16a34a"
                 />
               </td>
-              <td>
+              <td data-label="Acceptance Rate">
                 <span
                   style={{
                     fontSize: "var(--font-sm)",

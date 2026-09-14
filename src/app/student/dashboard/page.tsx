@@ -25,6 +25,7 @@ export default async function StudentDashboardPage() {
   const hasSubmissions = metrics.submitted > 0;
 
   // Split upcoming into open and past
+  const now = new Date();
   const openAssignments = upcomingAssignments.filter((a) => !a.isPast);
   const pastAssignments = upcomingAssignments.filter((a) => a.isPast);
 
@@ -101,7 +102,7 @@ export default async function StudentDashboardPage() {
               Submit your first assignment to track progress here.{" "}
               <Link
                 href="/student/assignments"
-                style={{ color: "var(--primary)" }}
+                className="btn btn-ghost btn-sm"
               >
                 Browse assignments
               </Link>
@@ -226,9 +227,9 @@ export default async function StudentDashboardPage() {
           </h2>
           <Link
             href="/student/assignments"
-            style={{ fontSize: "var(--font-sm)", color: "var(--primary)" }}
+            className="btn btn-ghost btn-sm"
           >
-            All assignments
+            All assignments →
           </Link>
         </div>
 
@@ -259,12 +260,12 @@ export default async function StudentDashboardPage() {
                   {[...openAssignments, ...pastAssignments].map((a) => {
                     const isUpcomingSoon =
                       !a.isPast &&
-                      a.deadline.getTime() - Date.now() <
+                      a.deadline.getTime() - now.getTime() <
                         7 * 24 * 60 * 60 * 1000;
 
                     return (
                       <tr key={a.assignmentId}>
-                        <td>
+                        <td data-label="Assignment">
                           <Link
                             href={`/student/assignments/${a.assignmentId}`}
                             style={{
@@ -287,10 +288,10 @@ export default async function StudentDashboardPage() {
                             </span>
                           )}
                         </td>
-                        <td>
+                        <td data-label="Difficulty">
                           <DifficultyBadge difficulty={a.difficulty} />
                         </td>
-                        <td>
+                        <td data-label="Deadline">
                           <span
                             style={{
                               fontSize: "var(--font-sm)",
@@ -318,7 +319,7 @@ export default async function StudentDashboardPage() {
                                 : daysUntil(a.deadline)}
                           </span>
                         </td>
-                        <td>
+                        <td data-label="Your status">
                           {a.submissionStatus ? (
                             <StatusBadge status={a.submissionStatus} />
                           ) : (
@@ -337,16 +338,18 @@ export default async function StudentDashboardPage() {
                         <td>
                           <Link
                             href={`/student/assignments/${a.assignmentId}`}
-                            style={{
-                              fontSize: "var(--font-sm)",
-                              color: "var(--primary)",
-                              whiteSpace: "nowrap",
-                            }}
+                            className={
+                              (!a.submissionStatus && !a.isPast) ||
+                              (a.submissionStatus === "needs_improvement" && !a.isPast)
+                                ? "btn btn-primary btn-sm"
+                                : "btn btn-ghost btn-sm"
+                            }
+                            style={{ whiteSpace: "nowrap" }}
                           >
                             {!a.submissionStatus && !a.isPast
-                              ? "Start"
+                              ? "Start →"
                               : a.submissionStatus === "needs_improvement" && !a.isPast
-                                ? "Resubmit"
+                                ? "Resubmit →"
                                 : "View"}
                           </Link>
                         </td>

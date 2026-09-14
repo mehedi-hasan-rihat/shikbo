@@ -60,10 +60,7 @@ export default async function StudentSubmissionsPage() {
           title="No submissions yet"
           description="Browse assignments and submit your work to see it here."
           action={
-            <Link
-              href="/student/assignments"
-              style={{ fontSize: "var(--font-sm)", color: "var(--primary)" }}
-            >
+            <Link href="/student/assignments" className="btn btn-primary btn-sm">
               Browse assignments
             </Link>
           }
@@ -91,7 +88,7 @@ export default async function StudentSubmissionsPage() {
 
                   return (
                     <tr key={a.id}>
-                      <td>
+                      <td data-label="Assignment">
                         <Link
                           href={`/student/assignments/${a.id}`}
                           style={{
@@ -114,13 +111,13 @@ export default async function StudentSubmissionsPage() {
                           </span>
                         )}
                       </td>
-                      <td>
+                      <td data-label="Difficulty">
                         <DifficultyBadge difficulty={a.difficulty} />
                       </td>
-                      <td>
+                      <td data-label="Latest status">
                         <StatusBadge status={latest.status} />
                       </td>
-                      <td>
+                      <td data-label="Attempts">
                         <span
                           style={{
                             fontSize: "var(--font-sm)",
@@ -130,7 +127,7 @@ export default async function StudentSubmissionsPage() {
                           {attempts.length}
                         </span>
                       </td>
-                      <td>
+                      <td data-label="Last submitted">
                         <span
                           style={{
                             fontSize: "var(--font-sm)",
@@ -141,15 +138,33 @@ export default async function StudentSubmissionsPage() {
                         </span>
                       </td>
                       <td>
-                        <Link
-                          href={`/student/assignments/${a.id}/history`}
-                          style={{
-                            fontSize: "var(--font-sm)",
-                            color: "var(--primary)",
-                          }}
-                        >
-                          History
-                        </Link>
+                        {latest.status === "needs_improvement" &&
+                        !a.archivedAt &&
+                        a.deadline > new Date() ? (
+                          <Link
+                            href={`/student/assignments/${a.id}`}
+                            className="btn btn-primary btn-sm"
+                            style={{ whiteSpace: "nowrap" }}
+                          >
+                            Resubmit →
+                          </Link>
+                        ) : hasFeedback ? (
+                          <Link
+                            href={`/student/assignments/${a.id}/history`}
+                            className="btn btn-primary btn-sm"
+                            style={{ whiteSpace: "nowrap" }}
+                          >
+                            View Feedback →
+                          </Link>
+                        ) : (
+                          <Link
+                            href={`/student/assignments/${a.id}/history`}
+                            className="btn btn-ghost btn-sm"
+                            style={{ whiteSpace: "nowrap" }}
+                          >
+                            History
+                          </Link>
+                        )}
                       </td>
                     </tr>
                   );

@@ -67,7 +67,7 @@ export default async function StudentAssignmentsPage() {
 
                   return (
                     <tr key={a.id}>
-                      <td>
+                      <td data-label="Title">
                         <Link
                           href={`/student/assignments/${a.id}`}
                           style={{
@@ -78,10 +78,10 @@ export default async function StudentAssignmentsPage() {
                           {a.title}
                         </Link>
                       </td>
-                      <td>
+                      <td data-label="Difficulty">
                         <DifficultyBadge difficulty={a.difficulty} />
                       </td>
-                      <td>
+                      <td data-label="Deadline">
                         <span
                           style={{
                             fontSize: "var(--font-sm)",
@@ -106,7 +106,7 @@ export default async function StudentAssignmentsPage() {
                           </span>
                         )}
                       </td>
-                      <td>
+                      <td data-label="Status">
                         {latestSubmission ? (
                           <StatusBadge status={latestSubmission.status} />
                         ) : (
@@ -123,12 +123,20 @@ export default async function StudentAssignmentsPage() {
                       <td>
                         <Link
                           href={`/student/assignments/${a.id}`}
-                          style={{
-                            fontSize: "var(--font-sm)",
-                            color: "var(--primary)",
-                          }}
+                          className={
+                            !isPast &&
+                            (!latestSubmission ||
+                              latestSubmission.status === "needs_improvement")
+                              ? "btn btn-primary btn-sm"
+                              : "btn btn-ghost btn-sm"
+                          }
+                          style={{ whiteSpace: "nowrap" }}
                         >
-                          View
+                          {!latestSubmission && !isPast
+                            ? "Start →"
+                            : latestSubmission?.status === "needs_improvement"
+                              ? "Resubmit →"
+                              : "View"}
                         </Link>
                       </td>
                     </tr>

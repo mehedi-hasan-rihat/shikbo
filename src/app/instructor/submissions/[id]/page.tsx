@@ -281,7 +281,7 @@ export default async function SubmissionReviewPage({
                                 : undefined
                             }
                           >
-                            <td>
+                            <td data-label="Attempt">
                               <span
                                 style={{
                                   fontSize: "var(--font-sm)",
@@ -307,7 +307,7 @@ export default async function SubmissionReviewPage({
                                 </span>
                               )}
                             </td>
-                            <td>
+                            <td data-label="Submitted">
                               <span
                                 style={{
                                   fontSize: "var(--font-sm)",
@@ -317,7 +317,7 @@ export default async function SubmissionReviewPage({
                                 {formatDate(s.submittedAt)}
                               </span>
                             </td>
-                            <td>
+                            <td data-label="Status">
                               <StatusBadge status={s.status} />
                             </td>
                             <td>

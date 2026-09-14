@@ -312,7 +312,7 @@ export default async function InstructorDashboardPage() {
                     );
                     return (
                       <tr key={a.assignmentId}>
-                        <td>
+                        <td data-label="Assignment">
                           <Link
                             href={`/instructor/assignments/${a.assignmentId}`}
                             style={{
@@ -324,7 +324,7 @@ export default async function InstructorDashboardPage() {
                             {a.title}
                           </Link>
                         </td>
-                        <td>
+                        <td data-label="Deadline">
                           <span
                             style={{
                               fontSize: "var(--font-sm)",
@@ -349,7 +349,7 @@ export default async function InstructorDashboardPage() {
                             {daysLeft <= 0 ? "Today" : daysLeft === 1 ? "1 day left" : `${daysLeft} days left`}
                           </span>
                         </td>
-                        <td>
+                        <td data-label="Pending">
                           {a.pendingCount > 0 ? (
                             <span
                               style={{
@@ -406,11 +406,8 @@ export default async function InstructorDashboardPage() {
           >
             Recent submissions
           </h2>
-          <Link
-            href="/instructor/submissions"
-            style={{ fontSize: "var(--font-sm)", color: "var(--primary)" }}
-          >
-            View all
+          <Link href="/instructor/submissions" className="btn btn-ghost btn-sm">
+            View all →
           </Link>
         </div>
 
@@ -439,7 +436,7 @@ export default async function InstructorDashboardPage() {
                 <tbody>
                   {recentSubmissions.map((sub: typeof recentSubmissions[number]) => (
                     <tr key={sub.id}>
-                      <td>
+                      <td data-label="Student">
                         <span
                           style={{
                             fontSize: "var(--font-sm)",
@@ -450,7 +447,7 @@ export default async function InstructorDashboardPage() {
                           {sub.student.name}
                         </span>
                       </td>
-                      <td>
+                      <td data-label="Assignment">
                         <span
                           style={{
                             fontSize: "var(--font-sm)",
@@ -460,10 +457,10 @@ export default async function InstructorDashboardPage() {
                           {sub.assignment.title}
                         </span>
                       </td>
-                      <td>
+                      <td data-label="Status">
                         <StatusBadge status={sub.status} />
                       </td>
-                      <td>
+                      <td data-label="Submitted">
                         <span
                           style={{
                             fontSize: "var(--font-sm)",
@@ -476,12 +473,14 @@ export default async function InstructorDashboardPage() {
                       <td>
                         <Link
                           href={`/instructor/submissions/${sub.id}`}
-                          style={{
-                            fontSize: "var(--font-sm)",
-                            color: "var(--primary)",
-                          }}
+                          className={
+                            sub.status === "pending"
+                              ? "btn btn-primary btn-sm"
+                              : "btn btn-ghost btn-sm"
+                          }
+                          style={{ whiteSpace: "nowrap" }}
                         >
-                          Review
+                          {sub.status === "pending" ? "Review →" : "View"}
                         </Link>
                       </td>
                     </tr>
